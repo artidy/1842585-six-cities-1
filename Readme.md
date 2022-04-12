@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
-* Студент: [Андрей Печенников](https://up.htmlacademy.ru/nodejs-api/1/user/1842585).
-* Наставник: `Неизвестно`.
+* Студент: [Андрей Печенников](https://htmlacademy.ru/profile/devandy).
+* Наставник: [Михаил Кислый](https://htmlacademy.ru/profile/smart-grizzly).
 
 ---
 
