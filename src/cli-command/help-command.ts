@@ -1,19 +1,20 @@
 import {CliCommandInterface} from './cli-command.interface.js';
+import {printCommand, printHeader} from './cli-functions.js';
 
 class HelpCommand implements CliCommandInterface {
   public readonly name = '--help';
 
   public async execute(): Promise<void> {
     console.log(`
-      Программа для подготовки данных для REST API сервера.
+      ${printHeader('Программа для подготовки данных для REST API сервера.')}
 
       Пример:
-          main.js --command [--arguments]
+          main.js ${printCommand('--command')} [--arguments]
 
       Команды:
-          --version:        # выводит номер версии приложения
-          --help:           # помощь по работе с CLI приложения
-          --import <path>:  # импортирует данные из файла в формате TSV
+          ${printCommand('--version')}:        # выводит номер версии приложения
+          ${printCommand('--help')}:           # помощь по работе с CLI приложения
+          ${printCommand('--import <path>')}:  # импортирует данные из файла в формате TSV
     `);
   }
 }

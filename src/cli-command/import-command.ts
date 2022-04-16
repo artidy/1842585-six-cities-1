@@ -1,5 +1,6 @@
 import {CliCommandInterface} from './cli-command.interface.js';
 import TsvFileReader from '../common/file-reader/tsv-file-reader.js';
+import {printError} from './cli-functions.js';
 
 class ImportCommand implements CliCommandInterface {
   public readonly name = '--import';
@@ -15,7 +16,7 @@ class ImportCommand implements CliCommandInterface {
         throw err;
       }
 
-      console.log(`Не удалось импортировать данные из файла по причине: ${err.message}`);
+      console.log(printError(`Не удалось импортировать данные из файла по причине: ${err.message}`));
     }
   }
 }

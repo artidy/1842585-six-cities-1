@@ -1,6 +1,7 @@
 import {readFileSync} from 'fs';
 
 import {CliCommandInterface} from './cli-command.interface.js';
+import {printInfo} from './cli-functions.js';
 
 class VersionCommand implements CliCommandInterface {
   public readonly name = '--version';
@@ -15,7 +16,7 @@ class VersionCommand implements CliCommandInterface {
   public async execute() {
     const version = this.getVersion();
 
-    console.log(version);
+    console.log(printInfo(version));
   }
 }
 
