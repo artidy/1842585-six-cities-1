@@ -12,9 +12,10 @@ class HelpCommand implements CliCommandInterface {
           main.js ${printCommand('--command')} [--arguments]
 
       Команды:
-          ${printCommand('--version')}:        # выводит номер версии приложения
-          ${printCommand('--help')}:           # помощь по работе с CLI приложения
-          ${printCommand('--import <path>')}:  # импортирует данные из файла в формате TSV
+          ${printCommand('--version')}:                            # выводит номер версии приложения
+          ${printCommand('--help')}:                               # помощь по работе с CLI приложения
+          ${printCommand('--import <path>')}:                      # импортирует данные из файла в формате TSV
+          ${printCommand('--generate <count> <filepath> <url>')}:  # создает файл в формате TSV со случайно сгенерированными данными
     `);
   }
 }

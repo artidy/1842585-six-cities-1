@@ -19,6 +19,7 @@ type Offer = {
   description: string;
   location: Location;
   id: number;
+  createdDate: Date;
 }
 
 export default Offer;
