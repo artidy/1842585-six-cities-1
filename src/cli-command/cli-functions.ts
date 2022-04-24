@@ -8,4 +8,6 @@ const printError = chalk.bold.red;
 
 const printInfo = chalk.yellow.bgGray;
 
-export {printHeader, printCommand, printError, printInfo};
+const printSuccess = chalk.green.bgWhite;
+
+export {printHeader, printCommand, printError, printInfo, printSuccess};
