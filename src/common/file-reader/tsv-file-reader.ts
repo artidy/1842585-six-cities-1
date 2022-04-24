@@ -3,7 +3,7 @@ import {createReadStream} from 'fs';
 
 import {FileReaderInterface} from './file-reader.interface.js';
 
-class TsvFileReader extends EventEmitter implements FileReaderInterface {
+class TSVFileReader extends EventEmitter implements FileReaderInterface {
   constructor(public fileName: string) {
     super();
   }
@@ -34,4 +34,4 @@ class TsvFileReader extends EventEmitter implements FileReaderInterface {
   }
 }
 
-export default TsvFileReader;
+export default TSVFileReader;

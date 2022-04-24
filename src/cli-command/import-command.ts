@@ -1,6 +1,6 @@
 import {CliCommandInterface} from './cli-command.interface.js';
-import TsvFileReader from '../common/file-reader/tsv-file-reader.js';
-import {createOffer, getErrorMessage, printError, printInfo} from './cli-functions.js';
+import TSVFileReader from '../common/file-reader/tsv-file-reader.js';
+import {createOffer, getErrorMessage, printError, printSuccess} from './cli-functions.js';
 
 class ImportCommand implements CliCommandInterface {
   public readonly name = '--import';
@@ -11,11 +11,11 @@ class ImportCommand implements CliCommandInterface {
   }
 
   private onComplete(count: number) {
-    console.log(printInfo(`${count} импортировано предложений.`));
+    console.log(printSuccess(`Импортировано предложений: ${count}.`));
   }
 
   public async execute(fileName = '') {
-    const fileReader = new TsvFileReader(fileName.trim());
+    const fileReader = new TSVFileReader(fileName.trim());
     fileReader.on('line', this.onLine);
     fileReader.on('end', this.onComplete);
 
