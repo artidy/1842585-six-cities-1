@@ -1,14 +1,14 @@
+import 'reflect-metadata';
+import {Component} from '../types/component.types.js';
 import {ConfigInterface} from '../common/config/config.interface.js';
+import {inject, injectable} from 'inversify';
 import {LoggerInterface} from '../common/logger/logger.interface.js';
 
+@injectable()
 class Application {
-  private logger!: LoggerInterface;
-  private config!: ConfigInterface;
-
-  constructor(logger: LoggerInterface, config: ConfigInterface) {
-    this.logger = logger;
-    this.config = config;
-  }
+  constructor(
+    @inject(Component.LoggerInterface) private logger: LoggerInterface,
+    @inject(Component.ConfigInterface) private config: ConfigInterface) {}
 
   public async init() {
     this.logger.info('Приложение инициализировано.');
