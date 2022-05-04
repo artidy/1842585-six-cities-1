@@ -21,4 +21,12 @@ const getRandomItems = <T>(items: T[]): T[] => {
   return result;
 };
 
-export {generateRandomValue, getRandomItem, getRandomBoolean, getRandomItems};
+const getMongodbURI = (
+  username: string,
+  password: string,
+  host: string,
+  port: number,
+  databaseName: string,
+): string => `mongodb://${username}:${password}@${host}:${port}/${databaseName}`;
+
+export {generateRandomValue, getRandomItem, getRandomBoolean, getRandomItems, getMongodbURI};
