@@ -17,12 +17,17 @@ class Application {
     this.logger.info('Приложение инициализировано.');
     this.logger.info(`Приложения работает на порте ${this.config.get('PORT')}`);
 
+    const dbUser = this.config.get('DB_USER');
+
     const uri = getMongodbURI(
-      this.config.get('DB_USER'),
+      dbUser,
       this.config.get('DB_PASSWORD'),
       this.config.get('DB_HOST'),
       this.config.get('DB_PORT'),
-      this.config.get('DB_NAME')
+      this.config.get('DB_NAME'),
+      {
+        authSource: dbUser
+      }
     );
 
     await this.databaseClient.connect(uri);
