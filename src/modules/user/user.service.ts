@@ -16,10 +16,10 @@ class UserService implements UserServiceInterface {
     @inject(Component.UserModel) private readonly userModel: ModelType<UserEntity>
   ) {}
 
-  public async create(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
+  public async create(dto: CreateUserDto, saltRounds: number): Promise<DocumentType<UserEntity>> {
     const user = new UserEntity(dto);
 
-    await user.setPassword(dto.password, salt);
+    await user.setPassword(dto.password, saltRounds);
     const result = await this.userModel.create(user);
     this.logger.info(`Новый пользователь ${dto.email} был создан.`);
 
@@ -30,8 +30,8 @@ class UserService implements UserServiceInterface {
     return this.userModel.findOne({email});
   }
 
-  public async findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
-    return await this.findByEmail(dto.email) ?? await this.create(dto, salt);
+  public async findOrCreate(dto: CreateUserDto, saltRounds: number): Promise<DocumentType<UserEntity>> {
+    return await this.findByEmail(dto.email) ?? await this.create(dto, saltRounds);
   }
 }
 

@@ -1,7 +1,9 @@
 import {Base, TimeStamps} from '@typegoose/typegoose/lib/defaultClasses.js';
-import {getModelForClass, modelOptions, prop} from '@typegoose/typegoose';
+import typegoose, {getModelForClass}  from '@typegoose/typegoose';
 
 import CreateGoodDto from './create-good.dto.js';
+
+const {modelOptions, prop} = typegoose;
 
 export interface GoodEntity extends Base {}
 

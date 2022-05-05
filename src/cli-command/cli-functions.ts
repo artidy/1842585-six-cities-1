@@ -29,6 +29,7 @@ const createOffer = (row: string) => {
     maxAdults,
     price,
     goods,
+    email,
     hostName,
     hostType,
     hostAvatar,
@@ -62,10 +63,11 @@ const createOffer = (row: string) => {
     price: +price,
     goods: goods.split(','),
     host: {
+      email,
       name: hostName,
       avatarUrl: hostAvatar,
       isPro: Boolean(hostType),
-      id: +hostId,
+      id: hostId,
     },
     description,
     location: {

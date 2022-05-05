@@ -1,6 +1,8 @@
-import {hash} from 'bcrypt';
-import {getModelForClass, modelOptions, prop} from '@typegoose/typegoose';
+import {genSalt, hash} from 'bcrypt';
+import typegoose, {getModelForClass}  from '@typegoose/typegoose';
 import {Base, TimeStamps} from '@typegoose/typegoose/lib/defaultClasses.js';
+
+const {modelOptions, prop} = typegoose;
 
 import CreateUserDto from './create-user.dto.js';
 import User from '../../types/user.js';
@@ -37,7 +39,8 @@ export class UserEntity extends TimeStamps implements User {
   @prop({ required: true })
   private password!: string;
 
-  public async setPassword(password: string, salt: string) {
+  public async setPassword(password: string, saltRounds: number) {
+    const salt = await genSalt(saltRounds);
     this.password = await hash(password, salt);
   }
 

@@ -5,7 +5,7 @@ convict.addFormats(validator);
 
 type ConfigSchema = {
   PORT: number;
-  SALT: string;
+  SALT_ROUNDS: number;
   DB_HOST: string;
   DB_USER: string;
   DB_PASSWORD: string;
@@ -20,10 +20,10 @@ const configSchema = convict<ConfigSchema>({
     env: 'PORT',
     default: 4000
   },
-  SALT: {
-    doc: 'Соль для хеша паролей',
-    format: String,
-    env: 'SALT',
+  SALT_ROUNDS: {
+    doc: 'Сложность генерируемой соли',
+    format: Number,
+    env: 'SALT_ROUNDS',
     default: null
   },
   DB_HOST: {

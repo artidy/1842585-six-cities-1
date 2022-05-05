@@ -47,6 +47,7 @@ class OfferGenerator implements OfferGeneratorInterface {
       generateRandomValue(MIN_GUESTS, MAX_GUESTS),
       generateRandomValue(MIN_PRICE, MAX_PRICE),
       getRandomItems<string>(this.mockData.goods).join(','),
+      randomUser.email,
       randomUser.name,
       randomUser.isPro,
       randomUser.avatarUrl,

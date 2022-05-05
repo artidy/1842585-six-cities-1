@@ -1,11 +1,13 @@
 import {Base, TimeStamps} from '@typegoose/typegoose/lib/defaultClasses.js';
-import {getModelForClass, modelOptions, prop, Ref} from '@typegoose/typegoose';
+import typegoose, {getModelForClass, Ref}  from '@typegoose/typegoose';
 
 import Location from '../../types/location.js';
 import {CityEntity} from '../city/city.entity.js';
 import {BuildingTypeEntity} from '../building-type/building-type.entity.js';
 import {GoodEntity} from '../good/good.entity.js';
 import {UserEntity} from '../user/user.entity.js';
+
+const {modelOptions, prop} = typegoose;
 
 export interface OfferEntity extends Base {}
 

@@ -15,7 +15,6 @@ class CreateOfferDto {
   public host!: string;
   public description!: string;
   public location!: Location;
-  public id!: string;
   public createdDate!: Date;
 }
 

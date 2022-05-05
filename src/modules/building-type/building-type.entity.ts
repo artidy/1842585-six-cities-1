@@ -1,7 +1,9 @@
 import {Base, TimeStamps} from '@typegoose/typegoose/lib/defaultClasses.js';
-import {getModelForClass, modelOptions, prop} from '@typegoose/typegoose';
+import typegoose, {getModelForClass}  from '@typegoose/typegoose';
 
 import CreateBuildingTypeDto from './create-building-type.dto.js';
+
+const {modelOptions, prop} = typegoose;
 
 export interface BuildingTypeEntity extends Base {}
 
