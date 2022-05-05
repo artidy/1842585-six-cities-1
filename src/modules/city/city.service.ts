@@ -1,11 +1,13 @@
+import 'reflect-metadata';
 import {inject, injectable} from 'inversify';
+import {ModelType} from '@typegoose/typegoose/lib/types.js';
+import {DocumentType} from '@typegoose/typegoose';
+
 import {CityServiceInterface} from './city-service.interface.js';
 import {Component} from '../../types/component.types.js';
 import {LoggerInterface} from '../../common/logger/logger.interface.js';
-import {ModelType} from '@typegoose/typegoose/lib/types.js';
 import {CityEntity} from './city.entity.js';
 import CreateCityDto from './create-city.dto.js';
-import {DocumentType} from '@typegoose/typegoose';
 
 @injectable()
 class CityService implements CityServiceInterface {

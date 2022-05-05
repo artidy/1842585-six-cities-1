@@ -14,6 +14,9 @@ import UserService from './modules/user/user.service.js';
 import {CityServiceInterface} from './modules/city/city-service.interface.js';
 import CityService from './modules/city/city.service.js';
 import {CityEntity, CityModel} from './modules/city/city.entity.js';
+import {BuildingTypeServiceInterface} from './modules/building-type/building-type-service.interface.js';
+import BuildingTypeService from './modules/building-type/building-type.service.js';
+import {BuildingTypeEntity, BuildingTypeModel} from './modules/building-type/building-type.entity.js';
 
 const applicationContainer = new Container();
 
@@ -23,8 +26,10 @@ applicationContainer.bind<ConfigService>(Component.ConfigInterface).to(ConfigSer
 applicationContainer.bind<DatabaseInterface>(Component.DatabaseInterface).to(DatabaseService).inSingletonScope();
 applicationContainer.bind<ModelType<UserEntity>>(Component.UserModel).toConstantValue(UserModel);
 applicationContainer.bind<ModelType<CityEntity>>(Component.CityModel).toConstantValue(CityModel);
+applicationContainer.bind<ModelType<BuildingTypeEntity>>(Component.BuildingTypeModel).toConstantValue(BuildingTypeModel);
 applicationContainer.bind<UserServiceInterface>(Component.UserServiceInterface).to(UserService).inSingletonScope();
 applicationContainer.bind<CityServiceInterface>(Component.CityServiceInterface).to(CityService).inSingletonScope();
+applicationContainer.bind<BuildingTypeServiceInterface>(Component.BuildingTypeServiceInterface).to(BuildingTypeService).inSingletonScope();
 
 const application = applicationContainer.get<Application>(Component.Application);
 

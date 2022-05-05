@@ -1,7 +1,7 @@
 class CreateCityDto {
   public name!: string;
-  latitude!: number;
-  longitude!: number;
+  public latitude!: number;
+  public longitude!: number;
 }
 
 export default CreateCityDto;
