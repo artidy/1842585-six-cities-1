@@ -13,7 +13,6 @@ class DatabaseService implements DatabaseInterface {
 
   public async connect(uri: string): Promise<void> {
     this.logger.info('Попытка подключения к базе данных...');
-    this.logger.info(uri);
     await mongoose.connect(uri);
     this.logger.info('Подключение к базе данных установлено.');
   }
