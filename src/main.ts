@@ -11,6 +11,9 @@ import {DatabaseInterface} from './common/database-client/database.interface.js'
 import {UserEntity, UserModel} from './modules/user/user.entity.js';
 import {UserServiceInterface} from './modules/user/user-service.interface.js';
 import UserService from './modules/user/user.service.js';
+import {CityServiceInterface} from './modules/city/city-service.interface.js';
+import CityService from './modules/city/city.service.js';
+import {CityEntity, CityModel} from './modules/city/city.entity.js';
 
 const applicationContainer = new Container();
 
@@ -19,7 +22,9 @@ applicationContainer.bind<LoggerInterface>(Component.LoggerInterface).to(LoggerS
 applicationContainer.bind<ConfigService>(Component.ConfigInterface).to(ConfigService).inSingletonScope();
 applicationContainer.bind<DatabaseInterface>(Component.DatabaseInterface).to(DatabaseService).inSingletonScope();
 applicationContainer.bind<ModelType<UserEntity>>(Component.UserModel).toConstantValue(UserModel);
-applicationContainer.bind<UserServiceInterface>(Component.UserServiceInterface).to(UserService);
+applicationContainer.bind<ModelType<CityEntity>>(Component.CityModel).toConstantValue(CityModel);
+applicationContainer.bind<UserServiceInterface>(Component.UserServiceInterface).to(UserService).inSingletonScope();
+applicationContainer.bind<CityServiceInterface>(Component.CityServiceInterface).to(CityService).inSingletonScope();
 
 const application = applicationContainer.get<Application>(Component.Application);
 
