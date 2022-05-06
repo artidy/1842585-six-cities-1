@@ -1,6 +1,7 @@
 type User = {
+  email: string;
   avatarUrl: string;
-  id: number;
+  id: string;
   isPro: boolean;
   name: string;
 }

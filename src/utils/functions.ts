@@ -1,3 +1,5 @@
+import {DatabaseOptions} from '../types/database-options.js';
+
 const generateRandomValue = (min: number, max: number, digit = 0): number =>
   +((Math.random() * (max - min)) + min).toFixed(digit);
 
@@ -21,4 +23,20 @@ const getRandomItems = <T>(items: T[]): T[] => {
   return result;
 };
 
-export {generateRandomValue, getRandomItem, getRandomBoolean, getRandomItems};
+const getOptionsString = (options: DatabaseOptions): string => {
+  const optionsKeys = Object.keys(options);
+
+  return optionsKeys.reduce((prev, current) =>
+    `${prev === '' ? '?' : ''}${current}=${options[current as keyof DatabaseOptions]}`, '');
+};
+
+const getMongodbURI = (
+  username: string,
+  password: string,
+  host: string,
+  port: number,
+  databaseName: string,
+  options: DatabaseOptions = {}
+): string => `mongodb://${username}:${password}@${host}:${port}/${databaseName}${getOptionsString(options)}`;
+
+export {generateRandomValue, getRandomItem, getRandomBoolean, getRandomItems, getMongodbURI};

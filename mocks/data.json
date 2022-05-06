@@ -99,24 +99,28 @@
     ],
     "authors": [
       {
+        "email": "angelina@example.ru",
         "id": 25,
         "name": "Angelina",
         "isPro": true,
         "avatarUrl": "img/avatar-angelina.jpg"
       },
       {
+        "email": "antonio@example.ru",
         "id": 12,
         "name": "Antonio",
         "isPro": false,
         "avatarUrl": "img/avatar-antonio.jpg"
       },
       {
+        "email": "siera@example.ru",
         "id": 33,
         "name": "Siera",
         "isPro": true,
         "avatarUrl": "img/avatar-siera.jpg"
       },
       {
+        "email": "gregor@example.ru",
         "id": 85,
         "name": "Gregor",
         "isPro": true,
