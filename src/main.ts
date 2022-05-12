@@ -28,6 +28,7 @@ import OfferController from './modules/offer/offer.controller.js';
 import ExceptionFilter from './common/errors/exception-filter.js';
 import {ExceptionFilterInterface} from './common/errors/exception-filter.interface.js';
 import BuildingTypeController from './modules/building-type/building-type.controller.js';
+import CityController from './modules/city/city.controller.js';
 
 const applicationContainer = new Container();
 
@@ -48,6 +49,7 @@ applicationContainer.bind<OfferServiceInterface>(Component.OfferServiceInterface
 applicationContainer.bind<ControllerInterface>(Component.OfferController).to(OfferController).inSingletonScope();
 applicationContainer.bind<ExceptionFilterInterface>(Component.ExceptionFilterInterface).to(ExceptionFilter).inSingletonScope();
 applicationContainer.bind<ControllerInterface>(Component.BuildingTypeController).to(BuildingTypeController).inSingletonScope();
+applicationContainer.bind<ControllerInterface>(Component.CityController).to(CityController).inSingletonScope();
 
 const application = applicationContainer.get<Application>(Component.Application);
 

@@ -2,7 +2,7 @@ import {Base, TimeStamps} from '@typegoose/typegoose/lib/defaultClasses.js';
 import typegoose, {getModelForClass}  from '@typegoose/typegoose';
 
 import City from '../../types/city.js';
-import CreateCityDto from './create-city.dto.js';
+import CreateCityDto from './dto/create-city.dto.js';
 import Location from '../../types/location.js';
 
 const {modelOptions, prop} = typegoose;

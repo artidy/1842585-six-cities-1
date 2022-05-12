@@ -7,7 +7,7 @@ import {CityServiceInterface} from './city-service.interface.js';
 import {Component} from '../../types/component.types.js';
 import {LoggerInterface} from '../../common/logger/logger.interface.js';
 import {CityEntity} from './city.entity.js';
-import CreateCityDto from './create-city.dto.js';
+import CreateCityDto from './dto/create-city.dto.js';
 
 @injectable()
 class CityService implements CityServiceInterface {
@@ -15,6 +15,10 @@ class CityService implements CityServiceInterface {
     @inject(Component.LoggerInterface) private logger: LoggerInterface,
     @inject(Component.CityModel) private readonly cityModel: ModelType<CityEntity>
   ) {}
+
+  public async find(): Promise<DocumentType<CityEntity>[]> {
+    return this.cityModel.find();
+  }
 
   public async create(dto: CreateCityDto): Promise<DocumentType<CityEntity>> {
     const city = new CityEntity(dto);

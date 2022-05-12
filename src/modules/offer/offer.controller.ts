@@ -21,7 +21,7 @@ class OfferController extends Controller {
   ) {
     super(logger);
 
-    this.logger.info('Добавление роутеров для предложений...');
+    this.logger.info('Добавление роутов для предложений...');
     this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
     this.addRoute({path: '/:offerId', method: HttpMethod.Get, handler: this.getOfferById});
     this.addRoute({path: '/:offerId', method: HttpMethod.Put, handler: this.updateOfferById});

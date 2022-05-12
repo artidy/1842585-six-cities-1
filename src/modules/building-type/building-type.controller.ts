@@ -21,7 +21,7 @@ class BuildingTypeController extends Controller {
   ) {
     super(logger);
 
-    this.logger.info('Инициализация роутов для типов жилья.');
+    this.logger.info('Добавление роутов для типов жилья...');
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
     this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
   }

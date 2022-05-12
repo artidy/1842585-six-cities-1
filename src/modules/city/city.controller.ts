@@ -1,0 +1,57 @@
+import {Request, Response} from 'express';
+import {StatusCodes} from 'http-status-codes';
+import {inject, injectable} from 'inversify';
+
+import {Controller} from '../../common/controller/controller.js';
+import {Component} from '../../types/component.types.js';
+import {LoggerInterface} from '../../common/logger/logger.interface.js';
+import {CityServiceInterface} from './city-service.interface.js';
+import {HttpMethod} from '../../types/http-method.enum.js';
+import {fillDTO} from '../../utils/functions.js';
+import HttpError from '../../common/errors/http-error.js';
+import CreateCityDto from './dto/create-city.dto.js';
+import CityDto from './dto/city.dto.js';
+
+@injectable()
+class CityController extends Controller {
+  constructor(
+    @inject(Component.LoggerInterface) logger: LoggerInterface,
+    @inject(Component.CityServiceInterface) private readonly cityService: CityServiceInterface
+  ) {
+    super(logger);
+
+    this.logger.info('Добавление роутов для городов...');
+    this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
+    this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
+  }
+
+  public async index(_req: Request, res: Response): Promise<void> {
+    this.send(
+      res,
+      StatusCodes.OK,
+      fillDTO(CityDto, await this.cityService.find())
+    );
+  }
+
+  public async create({body}: Request<Record<string, unknown>, Record<string, unknown>, CreateCityDto>, res: Response) {
+    const buildingType = await this.cityService.findByName(body.name);
+
+    if (buildingType) {
+      throw new HttpError(
+        StatusCodes.UNPROCESSABLE_ENTITY,
+        `Город ${body.name} уже существует.`,
+        'CityController',
+      );
+    }
+
+    const result = await this.cityService.create(body);
+
+    this.send(
+      res,
+      StatusCodes.CREATED,
+      fillDTO(CityDto, result)
+    );
+  }
+}
+
+export default CityController;

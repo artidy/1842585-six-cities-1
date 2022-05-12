@@ -20,7 +20,8 @@ class Application {
     @inject(Component.DatabaseInterface) private databaseClient: DatabaseInterface,
     @inject(Component.ExceptionFilterInterface) private exceptionFilter: ExceptionFilterInterface,
     @inject(Component.OfferController) private offerController: ControllerInterface,
-    @inject(Component.BuildingTypeController) private buildingTypeController: ControllerInterface
+    @inject(Component.BuildingTypeController) private buildingTypeController: ControllerInterface,
+    @inject(Component.CityController) private cityController: ControllerInterface
   ) {
     this.expressApp = express();
   }
@@ -28,6 +29,7 @@ class Application {
   public registerRoutes() {
     this.expressApp.use('/offers', this.offerController.router);
     this.expressApp.use('/buildingtypes', this.buildingTypeController.router);
+    this.expressApp.use('/cities', this.cityController.router);
   }
 
   public registerMiddlewares() {

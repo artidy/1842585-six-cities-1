@@ -15,7 +15,8 @@ const Component = {
   OfferServiceInterface: Symbol.for('OfferServiceInterface'),
   OfferController: Symbol.for('OfferController'),
   ExceptionFilterInterface: Symbol.for('ExceptionFilterInterface'),
-  BuildingTypeController: Symbol.for('BuildingTypeController')
+  BuildingTypeController: Symbol.for('BuildingTypeController'),
+  CityController: Symbol.for('CityController')
 } as const;
 
 export {Component};
