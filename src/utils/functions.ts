@@ -1,3 +1,5 @@
+import {ClassConstructor, plainToInstance} from 'class-transformer';
+
 import {DatabaseOptions} from '../types/database-options.js';
 
 const generateRandomValue = (min: number, max: number, digit = 0): number =>
@@ -39,4 +41,11 @@ const getMongodbURI = (
   options: DatabaseOptions = {}
 ): string => `mongodb://${username}:${password}@${host}:${port}/${databaseName}${getOptionsString(options)}`;
 
-export {generateRandomValue, getRandomItem, getRandomBoolean, getRandomItems, getMongodbURI};
+const fillDTO = <T, V>(someDto: ClassConstructor<T>, plainObject: V) =>
+  plainToInstance(someDto, plainObject, {excludeExtraneousValues: true});
+
+const createErrorObject = (message: string) => ({
+  error: message,
+});
+
+export {generateRandomValue, getRandomItem, getRandomBoolean, getRandomItems, getMongodbURI, fillDTO, createErrorObject};

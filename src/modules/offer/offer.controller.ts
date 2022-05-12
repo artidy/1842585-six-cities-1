@@ -1,0 +1,99 @@
+import 'reflect-metadata';
+import {Request, Response} from 'express';
+import {inject, injectable} from 'inversify';
+import {StatusCodes} from 'http-status-codes';
+
+import {Component} from '../../types/component.types.js';
+import {LoggerInterface} from '../../common/logger/logger.interface.js';
+import {OfferServiceInterface} from './offer-service.interface.js';
+import {Controller} from '../../common/controller/controller.js';
+import {HttpMethod} from '../../types/http-method.enum.js';
+import CreateOfferDto from './dto/create-offer.dto.js';
+import {fillDTO} from '../../utils/functions.js';
+import HttpError from '../../common/errors/http-error.js';
+import OfferDto from './dto/offer.dto.js';
+
+@injectable()
+class OfferController extends Controller {
+  constructor(
+    @inject(Component.LoggerInterface) logger: LoggerInterface,
+    @inject(Component.OfferServiceInterface) private readonly offerService: OfferServiceInterface
+  ) {
+    super(logger);
+
+    this.logger.info('Добавление роутов для предложений...');
+    this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
+    this.addRoute({path: '/:offerId', method: HttpMethod.Get, handler: this.getOfferById});
+    this.addRoute({path: '/:offerId', method: HttpMethod.Put, handler: this.updateOfferById});
+    this.addRoute({path: '/:offerId', method: HttpMethod.Delete, handler: this.deleteOfferById});
+  }
+
+  public async create(
+    {body}: Request<Record<string, unknown>, Record<string, unknown>, CreateOfferDto>,
+    res: Response): Promise<void> {
+
+    const result = this.offerService.create(body);
+
+    this.send(
+      res,
+      StatusCodes.CREATED,
+      fillDTO(OfferDto, result)
+    );
+  }
+
+  public async getOfferById({params}: Request, res: Response): Promise<void> {
+    const offer = await this.offerService.findById(params.offerId);
+
+    if (!offer) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `Предложение с идентификатором ${params.offerId} не найдено.`,
+        'OfferController'
+      );
+    }
+
+    this.send(
+      res,
+      StatusCodes.OK,
+      fillDTO(OfferDto, offer)
+    );
+  }
+
+  public async updateOfferById({params, body}: Request, res: Response): Promise<void> {
+    const offer = await this.offerService.updateById(params.offerId, body);
+
+    if (!offer) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `Предложение с идентификатором ${params.offerId} не найдено.`,
+        'OfferController'
+      );
+    }
+
+    this.send(
+      res,
+      StatusCodes.OK,
+      fillDTO(OfferDto, offer)
+    );
+  }
+
+  public async deleteOfferById({params}: Request, res: Response): Promise<void> {
+    const offer = await this.offerService.deleteById(params.offerId);
+
+    if (!offer) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `Предложение с идентификатором ${params.offerId} не найдено.`,
+        'OfferController'
+      );
+    }
+
+    this.send(
+      res,
+      StatusCodes.OK,
+      {}
+    );
+  }
+}
+
+export default OfferController;

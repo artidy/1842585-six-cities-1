@@ -7,7 +7,7 @@ import {OfferServiceInterface} from './offer-service.interface.js';
 import {Component} from '../../types/component.types.js';
 import {LoggerInterface} from '../../common/logger/logger.interface.js';
 import {OfferEntity} from './offer.entity.js';
-import CreateOfferDto from './create-offer.dto.js';
+import CreateOfferDto from './dto/create-offer.dto.js';
 
 @injectable()
 class OfferService implements OfferServiceInterface {
@@ -26,6 +26,14 @@ class OfferService implements OfferServiceInterface {
 
   public async findById(id: string): Promise<DocumentType<OfferEntity> | null> {
     return this.modelOffer.findById(id);
+  }
+
+  public async updateById(id: string, dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+    return this.modelOffer.findByIdAndUpdate(id, dto);
+  }
+
+  public async deleteById(id: string): Promise<void | null> {
+    return this.modelOffer.findByIdAndDelete(id);
   }
 }
 

@@ -7,7 +7,7 @@ import {Component} from '../../types/component.types.js';
 import {LoggerInterface} from '../../common/logger/logger.interface.js';
 import {DocumentType} from '@typegoose/typegoose';
 import {UserEntity} from './user.entity.js';
-import CreateUserDto from './create-user.dto.js';
+import CreateUserDto from './dto/create-user.dto.js';
 
 @injectable()
 class UserService implements UserServiceInterface {
@@ -15,6 +15,10 @@ class UserService implements UserServiceInterface {
     @inject(Component.LoggerInterface) private logger: LoggerInterface,
     @inject(Component.UserModel) private readonly userModel: ModelType<UserEntity>
   ) {}
+
+  public async find(): Promise<DocumentType<UserEntity>[]> {
+    return this.userModel.find();
+  }
 
   public async create(dto: CreateUserDto, saltRounds: number): Promise<DocumentType<UserEntity>> {
     const user = new UserEntity(dto);

@@ -13,6 +13,12 @@ const Component = {
   BuildingTypeServiceInterface: Symbol.for('BuildingTypeServiceInterface'),
   GoodServiceInterface: Symbol.for('GoodServiceInterface'),
   OfferServiceInterface: Symbol.for('OfferServiceInterface'),
+  OfferController: Symbol.for('OfferController'),
+  ExceptionFilterInterface: Symbol.for('ExceptionFilterInterface'),
+  BuildingTypeController: Symbol.for('BuildingTypeController'),
+  CityController: Symbol.for('CityController'),
+  GoodController: Symbol.for('GoodController'),
+  UserController: Symbol.for('UserController')
 } as const;
 
 export {Component};

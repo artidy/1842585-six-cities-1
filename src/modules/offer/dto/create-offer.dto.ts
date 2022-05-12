@@ -1,4 +1,4 @@
-import Location from '../../types/location.js';
+import Location from '../../../types/location.js';
 
 class CreateOfferDto {
   public city!: string;
