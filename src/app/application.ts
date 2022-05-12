@@ -7,6 +7,8 @@ import {ConfigInterface} from '../common/config/config.interface.js';
 import {DatabaseInterface} from '../common/database-client/database.interface.js';
 import {LoggerInterface} from '../common/logger/logger.interface.js';
 import {getMongodbURI} from '../utils/functions.js';
+import {ExceptionFilterInterface} from '../common/errors/exception-filter.interface.js';
+import {ControllerInterface} from '../common/controller/controller.interface.js';
 
 @injectable()
 class Application {
@@ -15,8 +17,23 @@ class Application {
   constructor(
     @inject(Component.LoggerInterface) private logger: LoggerInterface,
     @inject(Component.ConfigInterface) private config: ConfigInterface,
-    @inject(Component.DatabaseInterface) private databaseClient: DatabaseInterface) {
+    @inject(Component.DatabaseInterface) private databaseClient: DatabaseInterface,
+    @inject(Component.ExceptionFilterInterface) private exceptionFilter: ExceptionFilterInterface,
+    @inject(Component.OfferController) private offerController: ControllerInterface
+  ) {
     this.expressApp = express();
+  }
+
+  public registerRoutes() {
+    this.expressApp.use('/offers', this.offerController.router);
+  }
+
+  public registerMiddlewares() {
+    this.expressApp.use(express.json());
+  }
+
+  public registerExceptionFilters() {
+    this.expressApp.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
   }
 
   public async init() {
@@ -38,6 +55,9 @@ class Application {
 
     await this.databaseClient.connect(uri);
 
+    this.registerMiddlewares();
+    this.registerRoutes();
+    this.registerExceptionFilters();
     this.expressApp.listen(port);
     this.logger.info(`Сервер стартовал на ${this.config.get('HOST')}:${port}`);
     this.logger.info('Приложение инициализировано.');

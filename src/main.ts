@@ -23,6 +23,10 @@ import GoodService from './modules/good/good.service.js';
 import {OfferEntity, OfferModel} from './modules/offer/offer.entity.js';
 import {OfferServiceInterface} from './modules/offer/offer-service.interface.js';
 import OfferService from './modules/offer/offer-service.js';
+import {ControllerInterface} from './common/controller/controller.interface.js';
+import OfferController from './modules/offer/offer.controller.js';
+import ExceptionFilter from './common/errors/exception-filter.js';
+import {ExceptionFilterInterface} from './common/errors/exception-filter.interface.js';
 
 const applicationContainer = new Container();
 
@@ -40,6 +44,8 @@ applicationContainer.bind<CityServiceInterface>(Component.CityServiceInterface).
 applicationContainer.bind<BuildingTypeServiceInterface>(Component.BuildingTypeServiceInterface).to(BuildingTypeService).inSingletonScope();
 applicationContainer.bind<GoodServiceInterface>(Component.GoodServiceInterface).to(GoodService).inSingletonScope();
 applicationContainer.bind<OfferServiceInterface>(Component.OfferServiceInterface).to(OfferService).inSingletonScope();
+applicationContainer.bind<ControllerInterface>(Component.OfferController).to(OfferController).inSingletonScope();
+applicationContainer.bind<ExceptionFilterInterface>(Component.ExceptionFilterInterface).to(ExceptionFilter).inSingletonScope();
 
 const application = applicationContainer.get<Application>(Component.Application);
 
