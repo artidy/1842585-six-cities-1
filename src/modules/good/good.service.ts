@@ -7,7 +7,7 @@ import {GoodServiceInterface} from './good-service.interface.js';
 import {Component} from '../../types/component.types.js';
 import {LoggerInterface} from '../../common/logger/logger.interface.js';
 import {GoodEntity} from './good.entity.js';
-import CreateGoodDto from './create-good.dto.js';
+import CreateGoodDto from './dto/create-good.dto.js';
 
 @injectable()
 class GoodService implements GoodServiceInterface {
@@ -15,6 +15,10 @@ class GoodService implements GoodServiceInterface {
     @inject(Component.LoggerInterface) private logger: LoggerInterface,
     @inject(Component.GoodModel) private readonly goodModel: ModelType<GoodEntity>
   ) {}
+
+  public async find(): Promise<DocumentType<GoodEntity>[]> {
+    return this.goodModel.find();
+  }
 
   public async create(dto: CreateGoodDto): Promise<DocumentType<GoodEntity>> {
     const good = new GoodEntity(dto);

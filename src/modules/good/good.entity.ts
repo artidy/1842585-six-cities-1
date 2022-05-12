@@ -1,7 +1,7 @@
 import {Base, TimeStamps} from '@typegoose/typegoose/lib/defaultClasses.js';
 import typegoose, {getModelForClass}  from '@typegoose/typegoose';
 
-import CreateGoodDto from './create-good.dto.js';
+import CreateGoodDto from './dto/create-good.dto.js';
 
 const {modelOptions, prop} = typegoose;
 
