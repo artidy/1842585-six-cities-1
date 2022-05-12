@@ -22,7 +22,8 @@ class Application {
     @inject(Component.OfferController) private offerController: ControllerInterface,
     @inject(Component.BuildingTypeController) private buildingTypeController: ControllerInterface,
     @inject(Component.CityController) private cityController: ControllerInterface,
-    @inject(Component.GoodController) private goodController: ControllerInterface
+    @inject(Component.GoodController) private goodController: ControllerInterface,
+    @inject(Component.UserController) private userController: ControllerInterface
   ) {
     this.expressApp = express();
   }
@@ -32,6 +33,7 @@ class Application {
     this.expressApp.use('/buildingtypes', this.buildingTypeController.router);
     this.expressApp.use('/cities', this.cityController.router);
     this.expressApp.use('/goods', this.goodController.router);
+    this.expressApp.use('/users', this.userController.router);
   }
 
   public registerMiddlewares() {

@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {Request, Response} from 'express';
 import {StatusCodes} from 'http-status-codes';
 import {inject, injectable} from 'inversify';

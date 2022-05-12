@@ -4,7 +4,7 @@ import {Base, TimeStamps} from '@typegoose/typegoose/lib/defaultClasses.js';
 
 const {modelOptions, prop} = typegoose;
 
-import CreateUserDto from './create-user.dto.js';
+import CreateUserDto from './dto/create-user.dto.js';
 import User from '../../types/user.js';
 
 export interface UserEntity extends Base {}

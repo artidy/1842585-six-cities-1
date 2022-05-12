@@ -30,6 +30,7 @@ import {ExceptionFilterInterface} from './common/errors/exception-filter.interfa
 import BuildingTypeController from './modules/building-type/building-type.controller.js';
 import CityController from './modules/city/city.controller.js';
 import GoodController from './modules/good/good.controller.js';
+import UserController from './modules/user/user.controller.js';
 
 const applicationContainer = new Container();
 
@@ -52,6 +53,7 @@ applicationContainer.bind<ExceptionFilterInterface>(Component.ExceptionFilterInt
 applicationContainer.bind<ControllerInterface>(Component.BuildingTypeController).to(BuildingTypeController).inSingletonScope();
 applicationContainer.bind<ControllerInterface>(Component.CityController).to(CityController).inSingletonScope();
 applicationContainer.bind<ControllerInterface>(Component.GoodController).to(GoodController).inSingletonScope();
+applicationContainer.bind<ControllerInterface>(Component.UserController).to(UserController).inSingletonScope();
 
 const application = applicationContainer.get<Application>(Component.Application);
 
