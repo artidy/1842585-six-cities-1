@@ -27,6 +27,7 @@ import {ControllerInterface} from './common/controller/controller.interface.js';
 import OfferController from './modules/offer/offer.controller.js';
 import ExceptionFilter from './common/errors/exception-filter.js';
 import {ExceptionFilterInterface} from './common/errors/exception-filter.interface.js';
+import BuildingTypeController from './modules/building-type/building-type.controller.js';
 
 const applicationContainer = new Container();
 
@@ -46,6 +47,7 @@ applicationContainer.bind<GoodServiceInterface>(Component.GoodServiceInterface).
 applicationContainer.bind<OfferServiceInterface>(Component.OfferServiceInterface).to(OfferService).inSingletonScope();
 applicationContainer.bind<ControllerInterface>(Component.OfferController).to(OfferController).inSingletonScope();
 applicationContainer.bind<ExceptionFilterInterface>(Component.ExceptionFilterInterface).to(ExceptionFilter).inSingletonScope();
+applicationContainer.bind<ControllerInterface>(Component.BuildingTypeController).to(BuildingTypeController).inSingletonScope();
 
 const application = applicationContainer.get<Application>(Component.Application);
 

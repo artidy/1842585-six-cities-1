@@ -1,7 +1,7 @@
 import {Base, TimeStamps} from '@typegoose/typegoose/lib/defaultClasses.js';
 import typegoose, {getModelForClass}  from '@typegoose/typegoose';
 
-import CreateBuildingTypeDto from './create-building-type.dto.js';
+import CreateBuildingTypeDto from './dto/create-building-type.dto.js';
 
 const {modelOptions, prop} = typegoose;
 

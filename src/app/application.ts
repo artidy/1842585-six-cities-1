@@ -19,13 +19,15 @@ class Application {
     @inject(Component.ConfigInterface) private config: ConfigInterface,
     @inject(Component.DatabaseInterface) private databaseClient: DatabaseInterface,
     @inject(Component.ExceptionFilterInterface) private exceptionFilter: ExceptionFilterInterface,
-    @inject(Component.OfferController) private offerController: ControllerInterface
+    @inject(Component.OfferController) private offerController: ControllerInterface,
+    @inject(Component.BuildingTypeController) private buildingTypeController: ControllerInterface
   ) {
     this.expressApp = express();
   }
 
   public registerRoutes() {
     this.expressApp.use('/offers', this.offerController.router);
+    this.expressApp.use('/buildingtypes', this.buildingTypeController.router);
   }
 
   public registerMiddlewares() {

@@ -4,7 +4,7 @@ import {DocumentType} from '@typegoose/typegoose';
 import {ModelType} from '@typegoose/typegoose/lib/types.js';
 
 import {BuildingTypeServiceInterface} from './building-type-service.interface.js';
-import CreateBuildingTypeDto from './create-building-type.dto.js';
+import CreateBuildingTypeDto from './dto/create-building-type.dto.js';
 import {BuildingTypeEntity} from './building-type.entity.js';
 import {Component} from '../../types/component.types.js';
 import {LoggerInterface} from '../../common/logger/logger.interface.js';
@@ -15,6 +15,10 @@ class BuildingTypeService implements BuildingTypeServiceInterface {
     @inject(Component.LoggerInterface) private logger: LoggerInterface,
     @inject(Component.BuildingTypeModel) private readonly buildingTypeModel: ModelType<BuildingTypeEntity>
   ) {}
+
+  public async find(): Promise<DocumentType<BuildingTypeEntity>[]> {
+    return this.buildingTypeModel.find();
+  }
 
   public async create(dto: CreateBuildingTypeDto): Promise<DocumentType<BuildingTypeEntity>> {
     const buildingType = new BuildingTypeEntity(dto);
