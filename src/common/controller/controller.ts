@@ -1,13 +1,17 @@
-import {ControllerInterface} from './controller.interface.js';
+import 'reflect-metadata';
 import {Response, Router} from 'express';
 import asyncHandler from 'express-async-handler';
+import {injectable} from 'inversify';
+
+import {ControllerInterface} from './controller.interface.js';
 import {LoggerInterface} from '../logger/logger.interface.js';
 import {RouteInterface} from '../../types/route.interface.js';
 
+@injectable()
 abstract class Controller implements ControllerInterface {
   readonly router: Router;
 
-  protected constructor(protected readonly logger: LoggerInterface) {
+  constructor(protected readonly logger: LoggerInterface) {
     this.router = Router();
   }
 
@@ -24,4 +28,4 @@ abstract class Controller implements ControllerInterface {
   }
 }
 
-export default Controller;
+export {Controller};

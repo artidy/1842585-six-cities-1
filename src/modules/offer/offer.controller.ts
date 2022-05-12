@@ -6,7 +6,7 @@ import {StatusCodes} from 'http-status-codes';
 import {Component} from '../../types/component.types.js';
 import {LoggerInterface} from '../../common/logger/logger.interface.js';
 import {OfferServiceInterface} from './offer-service.interface.js';
-import Controller from '../../common/controller/controller.js';
+import {Controller} from '../../common/controller/controller.js';
 import {HttpMethod} from '../../types/http-method.enum.js';
 import CreateOfferDto from './dto/create-offer.dto.js';
 import {fillDTO} from '../../utils/functions.js';
