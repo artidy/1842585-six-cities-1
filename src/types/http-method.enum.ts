@@ -6,4 +6,4 @@ enum HttpMethod {
   Put = 'put',
 }
 
-export {HttpMethod}
+export {HttpMethod};
