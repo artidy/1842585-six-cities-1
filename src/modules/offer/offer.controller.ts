@@ -12,6 +12,7 @@ import CreateOfferDto from './dto/create-offer.dto.js';
 import {fillDTO} from '../../utils/functions.js';
 import HttpError from '../../common/errors/http-error.js';
 import OfferDto from './dto/offer.dto.js';
+import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectid.middleware.js';
 
 @injectable()
 class OfferController extends Controller {
@@ -24,9 +25,24 @@ class OfferController extends Controller {
     this.logger.info('Добавление роутов для предложений...');
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
     this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
-    this.addRoute({path: '/:offerId', method: HttpMethod.Get, handler: this.getOfferById});
-    this.addRoute({path: '/:offerId', method: HttpMethod.Put, handler: this.updateOfferById});
-    this.addRoute({path: '/:offerId', method: HttpMethod.Delete, handler: this.deleteOfferById});
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Get,
+      handler: this.getOfferById,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+    });
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Put,
+      handler: this.updateOfferById,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+    });
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.Delete,
+      handler: this.deleteOfferById,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+    });
   }
 
   public async index(_req: Request, res: Response): Promise<void> {
