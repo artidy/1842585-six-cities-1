@@ -29,11 +29,7 @@ class UserController extends Controller {
   }
 
   public async index(_req: Request, res: Response): Promise<void> {
-    this.send(
-      res,
-      StatusCodes.OK,
-      fillDTO(UserDto, await this.userService.find())
-    );
+    this.ok(res, fillDTO(UserDto, await this.userService.find()));
   }
 
   public async register({body}: Request<Record<string, unknown>, Record<string, unknown>, CreateUserDto>, res: Response) {
@@ -49,11 +45,7 @@ class UserController extends Controller {
 
     const result = await this.userService.create(body, this.config.get('SALT_ROUNDS'));
 
-    this.send(
-      res,
-      StatusCodes.CREATED,
-      fillDTO(UserDto, result)
-    );
+    this.created(res, fillDTO(UserDto, result));
   }
 }
 

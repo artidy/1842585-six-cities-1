@@ -1,15 +1,18 @@
-import {Expose} from 'class-transformer';
+import {Expose, Type} from 'class-transformer';
 
+import BuildingTypeDto from '../../building-type/dto/building-type.dto.js';
+import CityDto from '../../city/dto/city.dto.js';
+import GoodDto from '../../good/dto/good.dto.js';
 import Location from '../../../types/location.js';
-import City from '../../../types/city.js';
-import User from '../../../types/user.js';
+import UserDto from '../../user/dto/user.dto.js';
 
 class OfferDto {
   @Expose()
-  public id!: number;
+  public id!: string;
 
   @Expose()
-  public city!: City;
+  @Type(() => CityDto)
+  public city!: CityDto;
 
   @Expose()
   public previewImage!: string;
@@ -27,7 +30,8 @@ class OfferDto {
   public rating!: number;
 
   @Expose()
-  public type!: string;
+  @Type(() => BuildingTypeDto)
+  public type!: BuildingTypeDto;
 
   @Expose()
   public bedrooms!: number;
@@ -39,10 +43,12 @@ class OfferDto {
   public price!: number;
 
   @Expose()
-  public goods!: string[];
+  @Type(() => GoodDto)
+  public goods!: GoodDto[];
 
   @Expose()
-  public host!: User;
+  @Type(() => UserDto)
+  public host!: UserDto;
 
   @Expose()
   public description!: string;

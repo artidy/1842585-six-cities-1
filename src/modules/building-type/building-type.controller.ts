@@ -27,11 +27,7 @@ class BuildingTypeController extends Controller {
   }
 
   public async index(_req: Request, res: Response): Promise<void> {
-    this.send(
-      res,
-      StatusCodes.OK,
-      fillDTO(BuildingTypeDto, await this.buildingTypeService.find())
-    );
+    this.ok(res, fillDTO(BuildingTypeDto, await this.buildingTypeService.find()));
   }
 
   public async create({body}: Request<Record<string, unknown>, Record<string, unknown>, CreateBuildingTypeDto>, res: Response) {
@@ -47,11 +43,7 @@ class BuildingTypeController extends Controller {
 
     const result = await this.buildingTypeService.create(body);
 
-    this.send(
-      res,
-      StatusCodes.CREATED,
-      fillDTO(BuildingTypeDto, result)
-    );
+    this.created(res, fillDTO(BuildingTypeDto, result));
   }
 }
 

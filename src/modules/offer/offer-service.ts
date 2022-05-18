@@ -16,6 +16,10 @@ class OfferService implements OfferServiceInterface {
     @inject(Component.OfferModel) private readonly modelOffer: ModelType<OfferEntity>
   ) {}
 
+  public async find(): Promise<DocumentType<OfferEntity>[]> {
+    return this.modelOffer.find();
+  }
+
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
     const result = await this.modelOffer.create(dto);
 
@@ -25,7 +29,7 @@ class OfferService implements OfferServiceInterface {
   }
 
   public async findById(id: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.modelOffer.findById(id);
+    return this.modelOffer.findById(id).populate(['city', 'type', 'goods', 'host']).exec();
   }
 
   public async updateById(id: string, dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {

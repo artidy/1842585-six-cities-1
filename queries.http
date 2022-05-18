@@ -1,0 +1,8 @@
+# Предложения
+### Запрос всех предложений
+GET http://localhost:23321/offers
+Accept: application/json
+
+### Запрос одного предложения
+GET http://localhost:23321/offers/62743c1be73040cb770cb474
+Accept: application/json
