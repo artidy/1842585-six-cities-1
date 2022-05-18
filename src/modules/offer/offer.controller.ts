@@ -34,11 +34,7 @@ class OfferController extends Controller {
 
     const result = this.offerService.create(body);
 
-    this.send(
-      res,
-      StatusCodes.CREATED,
-      fillDTO(OfferDto, result)
-    );
+    this.created(res, fillDTO(OfferDto, result));
   }
 
   public async getOfferById({params}: Request, res: Response): Promise<void> {
@@ -52,11 +48,7 @@ class OfferController extends Controller {
       );
     }
 
-    this.send(
-      res,
-      StatusCodes.OK,
-      fillDTO(OfferDto, offer)
-    );
+    this.ok(res, fillDTO(OfferDto, offer));
   }
 
   public async updateOfferById({params, body}: Request, res: Response): Promise<void> {
@@ -70,11 +62,7 @@ class OfferController extends Controller {
       );
     }
 
-    this.send(
-      res,
-      StatusCodes.OK,
-      fillDTO(OfferDto, offer)
-    );
+    this.ok(res, fillDTO(OfferDto, offer));
   }
 
   public async deleteOfferById({params}: Request, res: Response): Promise<void> {
@@ -88,11 +76,7 @@ class OfferController extends Controller {
       );
     }
 
-    this.send(
-      res,
-      StatusCodes.OK,
-      {}
-    );
+    this.noContent(res);
   }
 }
 

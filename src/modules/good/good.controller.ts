@@ -27,11 +27,7 @@ class GoodController extends Controller {
   }
 
   public async index(_req: Request, res: Response): Promise<void> {
-    this.send(
-      res,
-      StatusCodes.OK,
-      fillDTO(GoodDto, await this.goodService.find())
-    );
+    this.ok(res, fillDTO(GoodDto, await this.goodService.find()));
   }
 
   public async create({body}: Request<Record<string, unknown>, Record<string, unknown>, CreateGoodDto>, res: Response) {
@@ -47,11 +43,7 @@ class GoodController extends Controller {
 
     const result = await this.goodService.create(body);
 
-    this.send(
-      res,
-      StatusCodes.CREATED,
-      fillDTO(GoodDto, result)
-    );
+    this.created(res, fillDTO(GoodDto, result));
   }
 }
 

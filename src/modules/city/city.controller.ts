@@ -27,11 +27,7 @@ class CityController extends Controller {
   }
 
   public async index(_req: Request, res: Response): Promise<void> {
-    this.send(
-      res,
-      StatusCodes.OK,
-      fillDTO(CityDto, await this.cityService.find())
-    );
+    this.ok(res, fillDTO(CityDto, await this.cityService.find()));
   }
 
   public async create({body}: Request<Record<string, unknown>, Record<string, unknown>, CreateCityDto>, res: Response) {
@@ -47,11 +43,7 @@ class CityController extends Controller {
 
     const result = await this.cityService.create(body);
 
-    this.send(
-      res,
-      StatusCodes.CREATED,
-      fillDTO(CityDto, result)
-    );
+    this.created(res, fillDTO(CityDto, result));
   }
 }
 
