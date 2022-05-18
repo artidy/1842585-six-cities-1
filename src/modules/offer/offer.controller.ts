@@ -22,10 +22,15 @@ class OfferController extends Controller {
     super(logger);
 
     this.logger.info('Добавление роутов для предложений...');
+    this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
     this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
     this.addRoute({path: '/:offerId', method: HttpMethod.Get, handler: this.getOfferById});
     this.addRoute({path: '/:offerId', method: HttpMethod.Put, handler: this.updateOfferById});
     this.addRoute({path: '/:offerId', method: HttpMethod.Delete, handler: this.deleteOfferById});
+  }
+
+  public async index(_req: Request, res: Response): Promise<void> {
+    this.ok(res, fillDTO(OfferDto, await this.offerService.find()));
   }
 
   public async create(
