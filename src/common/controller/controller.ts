@@ -2,11 +2,11 @@ import 'reflect-metadata';
 import {Response, Router} from 'express';
 import asyncHandler from 'express-async-handler';
 import {injectable} from 'inversify';
+import {StatusCodes} from 'http-status-codes';
 
 import {ControllerInterface} from './controller.interface.js';
 import {LoggerInterface} from '../logger/logger.interface.js';
 import {RouteInterface} from '../../types/route.interface.js';
-import {StatusCodes} from 'http-status-codes/build/es/index.js';
 
 @injectable()
 abstract class Controller implements ControllerInterface {
