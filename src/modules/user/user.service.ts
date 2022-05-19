@@ -8,6 +8,7 @@ import {LoggerInterface} from '../../common/logger/logger.interface.js';
 import {DocumentType} from '@typegoose/typegoose';
 import {UserEntity} from './user.entity.js';
 import CreateUserDto from './dto/create-user.dto.js';
+import UpdateUserDto from './dto/update-user.dto.js';
 
 @injectable()
 class UserService implements UserServiceInterface {
@@ -36,6 +37,10 @@ class UserService implements UserServiceInterface {
 
   public async findOrCreate(dto: CreateUserDto, saltRounds: number): Promise<DocumentType<UserEntity>> {
     return await this.findByEmail(dto.email) ?? await this.create(dto, saltRounds);
+  }
+
+  public async updateById(id: string, dto: UpdateUserDto): Promise<DocumentType<UserEntity> | null> {
+    return await this.userModel.findByIdAndUpdate(id, dto).exec();
   }
 }
 
