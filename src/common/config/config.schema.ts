@@ -12,6 +12,7 @@ type ConfigSchema = {
   DB_PASSWORD: string;
   DB_PORT: number;
   DB_NAME: string;
+  UPLOAD_DIR: string;
 }
 
 const configSchema = convict<ConfigSchema>({
@@ -62,6 +63,12 @@ const configSchema = convict<ConfigSchema>({
     format: String,
     env: 'DB_NAME',
     default: null,
+  },
+  UPLOAD_DIR: {
+    doc: 'Директория для загрузки файлов',
+    format: String,
+    env: 'UPLOAD_DIR',
+    default: './upload',
   }
 });
 
