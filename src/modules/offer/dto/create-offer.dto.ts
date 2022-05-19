@@ -14,22 +14,15 @@ import {
 import Location from '../../../types/location.js';
 import {getValidateMessage} from '../../../utils/functions.js';
 import ValidateTypeEnum from '../../../types/validate-type.enum.js';
-
-const PREVIEW_MIN_LENGTH = 10;
-const IMAGE_MIN_COUNT = 6;
-const IMAGE_MAX_COUNT = 6;
-const TITLE_MIN_LENGTH = 10;
-const TITLE_MAX_LENGTH = 100;
-const DESCRIPTION_MIN_LENGTH = 20;
-const DESCRIPTION_MAX_LENGTH = 1024;
-const RATING_MIN = 1;
-const RATING_MAX = 5;
-const ROOMS_MIN = 1;
-const ROOMS_MAX = 8;
-const ADULTS_MIN = 1;
-const ADULTS_MAX = 10;
-const PRICE_MIN = 100;
-const PRICE_MAX = 100000;
+import {
+  ADULTS_MAX,
+  ADULTS_MIN, DESCRIPTION_MAX_LENGTH, DESCRIPTION_MIN_LENGTH,
+  IMAGE_MAX_COUNT,
+  IMAGE_MIN_COUNT,
+  PREVIEW_MIN_LENGTH, PRICE_MAX, PRICE_MIN, RATING_MAX, RATING_MIN, ROOMS_MAX, ROOMS_MIN,
+  TITLE_MAX_LENGTH,
+  TITLE_MIN_LENGTH
+} from '../../../common/const.js';
 
 class CreateOfferDto {
   @IsMongoId({message: getValidateMessage(ValidateTypeEnum.IsMongoId)})
