@@ -12,6 +12,7 @@ import HttpError from '../../common/errors/http-error.js';
 import {HttpMethod} from '../../types/http-method.enum.js';
 import GoodDto from './dto/good.dto.js';
 import CreateGoodDto from './dto/create-good.dto.js';
+import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 
 @injectable()
 class GoodController extends Controller {
@@ -23,7 +24,12 @@ class GoodController extends Controller {
 
     this.logger.info('Добавление роутов для удобств...');
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
-    this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateGoodDto)]
+    });
   }
 
   public async index(_req: Request, res: Response): Promise<void> {

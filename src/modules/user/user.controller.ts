@@ -13,6 +13,7 @@ import CreateUserDto from './dto/create-user.dto.js';
 import UserDto from './dto/user.dto.js';
 import {ConfigInterface} from '../../common/config/config.interface.js';
 import {HttpMethod} from '../../types/http-method.enum.js';
+import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 
 @injectable()
 class UserController extends Controller {
@@ -25,7 +26,12 @@ class UserController extends Controller {
 
     this.logger.info('Добавление роутов для пользователей...');
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
-    this.addRoute({path: '/', method: HttpMethod.Post, handler: this.register});
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Post,
+      handler: this.register,
+      middlewares: [new ValidateDtoMiddleware(CreateUserDto)]
+    });
   }
 
   public async index(_req: Request, res: Response): Promise<void> {
