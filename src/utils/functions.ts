@@ -73,6 +73,8 @@ const getValidateMessage = (validateType: ValidateTypeEnum, value: string | numb
       return `должно содержать число не больше ${value}.`;
     case ValidateTypeEnum.ValidateNested:
       return 'неверный формат значения';
+    case ValidateTypeEnum.IsEmail:
+      return 'неверный формат электронного адреса';
     default:
       return `${validateType} - неизвестная ошибка.`;
   }

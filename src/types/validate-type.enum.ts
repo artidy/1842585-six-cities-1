@@ -9,7 +9,8 @@ enum ValidateTypeEnum {
   IsBoolean = 'IsBoolean',
   Min = 'Min',
   Max = 'Max',
-  ValidateNested = 'ValidateNested'
+  ValidateNested = 'ValidateNested',
+  IsEmail = 'IsEmail'
 }
 
 export default ValidateTypeEnum;
