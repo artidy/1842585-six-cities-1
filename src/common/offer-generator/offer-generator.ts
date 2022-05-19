@@ -4,20 +4,20 @@ import {OfferGeneratorInterface} from './offer-generator.interface.js';
 import City from '../../types/city.js';
 import User from '../../types/user.js';
 import dayjs from 'dayjs';
+import {
+  ADULTS_MAX,
+  ADULTS_MIN, LATITUDE_MAX,
+  LATITUDE_MIN, LONGITUDE_MAX, LONGITUDE_MIN,
+  PRICE_MAX,
+  PRICE_MIN,
+  RATING_MAX,
+  RATING_MIN,
+  ROOMS_MAX,
+  ROOMS_MIN
+} from '../const.js';
 
-const MIN_RATING = 1;
-const MAX_RATING = 5;
 const DIGIT_RATING = 1;
-const MIN_ROOMS = 1;
-const MAX_ROOMS = 8;
-const MIN_GUESTS = 1;
-const MAX_GUESTS = 10;
-const MIN_PRICE = 100;
-const MAX_PRICE = 100000;
-const MIN_LATITUDE = 48.85661;
-const MAX_LATITUDE = 53.550341;
-const MIN_LONGITUDE = 2.351499;
-const MAX_LONGITUDE = 10.000654;
+const DIGIT_LOCATION = 6;
 const OFFER_ZOOM = 10;
 const MIN_OFFER_ID = 1;
 const MAX_OFFER_ID = 100000;
@@ -41,19 +41,19 @@ class OfferGenerator implements OfferGeneratorInterface {
       getRandomItem<string>(this.mockData.titles),
       getRandomBoolean(),
       getRandomBoolean(),
-      generateRandomValue(MIN_RATING, MAX_RATING, DIGIT_RATING),
+      generateRandomValue(RATING_MIN, RATING_MAX, DIGIT_RATING),
       getRandomItem<string>(this.mockData.buildings_type),
-      generateRandomValue(MIN_ROOMS, MAX_ROOMS),
-      generateRandomValue(MIN_GUESTS, MAX_GUESTS),
-      generateRandomValue(MIN_PRICE, MAX_PRICE),
+      generateRandomValue(ROOMS_MIN, ROOMS_MAX),
+      generateRandomValue(ADULTS_MIN, ADULTS_MAX),
+      generateRandomValue(PRICE_MIN, PRICE_MAX),
       getRandomItems<string>(this.mockData.goods).join(','),
       randomUser.email,
       randomUser.name,
       randomUser.isPro,
       randomUser.avatarUrl,
       getRandomItem<string>(this.mockData.descriptions),
-      generateRandomValue(MIN_LATITUDE, MAX_LATITUDE, 6),
-      generateRandomValue(MIN_LONGITUDE, MAX_LONGITUDE, 6),
+      generateRandomValue(LATITUDE_MIN, LATITUDE_MAX, DIGIT_LOCATION),
+      generateRandomValue(LONGITUDE_MIN, LONGITUDE_MAX, DIGIT_LOCATION),
       OFFER_ZOOM,
       randomUser.id,
       generateRandomValue(MIN_OFFER_ID, MAX_OFFER_ID),
