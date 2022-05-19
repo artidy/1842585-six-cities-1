@@ -8,6 +8,9 @@ import {Component} from '../../types/component.types.js';
 import {LoggerInterface} from '../../common/logger/logger.interface.js';
 import {OfferEntity} from './offer.entity.js';
 import CreateOfferDto from './dto/create-offer.dto.js';
+import UpdateOfferDto from './dto/update-offer.dto.js';
+
+const POPULATE_FIELDS = ['city', 'type', 'goods', 'host'];
 
 @injectable()
 class OfferService implements OfferServiceInterface {
@@ -29,11 +32,12 @@ class OfferService implements OfferServiceInterface {
   }
 
   public async findById(id: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.modelOffer.findById(id).populate(['city', 'type', 'goods', 'host']).exec();
+    return this.modelOffer.findById(id).populate(POPULATE_FIELDS).exec();
   }
 
-  public async updateById(id: string, dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
-    return this.modelOffer.findByIdAndUpdate(id, dto);
+  public async updateById(id: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+    return this.modelOffer.findByIdAndUpdate(id, dto, {new: true})
+      .populate(POPULATE_FIELDS).exec();
   }
 
   public async deleteById(id: string): Promise<void | null> {

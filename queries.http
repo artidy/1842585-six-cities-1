@@ -1,8 +1,22 @@
 # Предложения
 ### Запрос всех предложений
-GET http://localhost:23321/offers
+GET http://localhost:4000/offers
 Accept: application/json
 
 ### Запрос одного предложения
-GET http://localhost:23321/offers/62743c1be73040cb770cb474
+GET http://localhost:4000/offers/62743c1be73040cb770cb474
 Accept: application/json
+
+### Обновление данных предложения
+PATCH http://localhost:4000/offers/62743c1be73040cb770cb474
+Content-Type: application/json
+
+{
+  "title": "Объявление отредактировано",
+  "rating": 4.3,
+  "type": "62743c1be73040cb770cb477",
+  "goods": [
+    "62743c1be73040cb770cb469",
+    "62743c1be73040cb770cb46c"
+  ]
+}

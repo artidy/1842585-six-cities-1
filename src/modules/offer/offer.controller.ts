@@ -33,7 +33,7 @@ class OfferController extends Controller {
     });
     this.addRoute({
       path: '/:offerId',
-      method: HttpMethod.Put,
+      method: HttpMethod.Patch,
       handler: this.updateOfferById,
       middlewares: [new ValidateObjectIdMiddleware('offerId')]
     });
