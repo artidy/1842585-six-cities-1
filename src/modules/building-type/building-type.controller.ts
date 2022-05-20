@@ -12,6 +12,7 @@ import {fillDTO} from '../../utils/functions.js';
 import BuildingTypeDto from './dto/building-type.dto.js';
 import CreateBuildingTypeDto from './dto/create-building-type.dto.js';
 import HttpError from '../../common/errors/http-error.js';
+import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 
 @injectable()
 class BuildingTypeController extends Controller {
@@ -23,7 +24,12 @@ class BuildingTypeController extends Controller {
 
     this.logger.info('Добавление роутов для типов жилья...');
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
-    this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateBuildingTypeDto)]
+    });
   }
 
   public async index(_req: Request, res: Response): Promise<void> {

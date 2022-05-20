@@ -1,4 +1,4 @@
-import {IsBoolean, IsEmail, IsOptional, MaxLength, MinLength} from 'class-validator';
+import {IsBoolean, IsOptional, MaxLength, MinLength} from 'class-validator';
 
 import {getValidateMessage} from '../../../utils/functions.js';
 import ValidateTypeEnum from '../../../types/validate-type.enum.js';
@@ -10,34 +10,34 @@ import {
   TITLE_MIN_LENGTH
 } from '../../../common/const.js';
 
-class CreateUserDto {
-  @IsEmail({message: getValidateMessage(ValidateTypeEnum.IsEmail)})
-  public email!: string;
-
+class UpdateUserDto {
   @IsOptional()
   @MinLength(PREVIEW_MIN_LENGTH, {
     message: getValidateMessage(ValidateTypeEnum.MinLength, PREVIEW_MIN_LENGTH)
   })
   public avatarUrl?: string;
 
+  @IsOptional()
   @MinLength(TITLE_MIN_LENGTH, {
     message: getValidateMessage(ValidateTypeEnum.MinLength, TITLE_MIN_LENGTH)
   })
   @MaxLength(TITLE_MAX_LENGTH, {
     message: getValidateMessage(ValidateTypeEnum.Maxlength, TITLE_MAX_LENGTH)
   })
-  public name!: string;
+  public name?: string;
 
+  @IsOptional()
   @IsBoolean({message: getValidateMessage(ValidateTypeEnum.IsBoolean)})
-  public isPro!: boolean;
+  public isPro?: boolean;
 
+  @IsOptional()
   @MinLength(PASSWORD_MIN_LENGTH, {
     message: getValidateMessage(ValidateTypeEnum.MinLength, PASSWORD_MIN_LENGTH)
   })
   @MaxLength(PASSWORD_MAX_LENGTH, {
     message: getValidateMessage(ValidateTypeEnum.Maxlength, PASSWORD_MAX_LENGTH)
   })
-  public password!: string;
+  public password?: string;
 }
 
-export default CreateUserDto;
+export default UpdateUserDto;

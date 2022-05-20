@@ -12,6 +12,7 @@ import {fillDTO} from '../../utils/functions.js';
 import HttpError from '../../common/errors/http-error.js';
 import CreateCityDto from './dto/create-city.dto.js';
 import CityDto from './dto/city.dto.js';
+import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 
 @injectable()
 class CityController extends Controller {
@@ -23,7 +24,12 @@ class CityController extends Controller {
 
     this.logger.info('Добавление роутов для городов...');
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
-    this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateCityDto)]
+    });
   }
 
   public async index(_req: Request, res: Response): Promise<void> {

@@ -15,7 +15,7 @@ export interface UserEntity extends Base {}
   }
 })
 export class UserEntity extends TimeStamps implements User {
-  constructor({avatarUrl, name, isPro, email}: CreateUserDto) {
+  constructor({avatarUrl = '', name, isPro, email}: CreateUserDto) {
     super();
 
     this.email = email;

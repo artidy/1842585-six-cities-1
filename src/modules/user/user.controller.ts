@@ -13,6 +13,9 @@ import CreateUserDto from './dto/create-user.dto.js';
 import UserDto from './dto/user.dto.js';
 import {ConfigInterface} from '../../common/config/config.interface.js';
 import {HttpMethod} from '../../types/http-method.enum.js';
+import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
+import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectid.middleware.js';
+import UploadFileMiddleware from '../../common/middlewares/upload-file.middleware.js';
 
 @injectable()
 class UserController extends Controller {
@@ -25,7 +28,21 @@ class UserController extends Controller {
 
     this.logger.info('Добавление роутов для пользователей...');
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
-    this.addRoute({path: '/', method: HttpMethod.Post, handler: this.register});
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Post,
+      handler: this.register,
+      middlewares: [new ValidateDtoMiddleware(CreateUserDto)]
+    });
+    this.addRoute({
+      path: '/:userId/avatar',
+      method: HttpMethod.Post,
+      handler: this.uploadAvatar,
+      middlewares: [
+        new ValidateObjectIdMiddleware('userId'),
+        new UploadFileMiddleware(this.config.get('UPLOAD_DIR'), 'avatar')
+      ]
+    });
   }
 
   public async index(_req: Request, res: Response): Promise<void> {
@@ -44,6 +61,12 @@ class UserController extends Controller {
     }
 
     const result = await this.userService.create(body, this.config.get('SALT_ROUNDS'));
+
+    this.created(res, fillDTO(UserDto, result));
+  }
+
+  public async uploadAvatar({params, file}: Request, res: Response) {
+    const result = await this.userService.updateById(params.userId, {avatarUrl: file?.path});
 
     this.created(res, fillDTO(UserDto, result));
   }

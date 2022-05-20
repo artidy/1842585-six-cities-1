@@ -2,17 +2,16 @@ import {
   ArrayMaxSize,
   ArrayMinSize,
   IsBoolean,
-  IsDateString,
   IsMongoId,
+  IsOptional,
   Max,
   MaxLength,
   Min,
-  MinLength,
-  ValidateNested
+  MinLength, ValidateNested
 } from 'class-validator';
 
-import Location from '../../../types/location.js';
 import {getValidateMessage} from '../../../utils/functions.js';
+import Location from '../../../types/location.js';
 import ValidateTypeEnum from '../../../types/validate-type.enum.js';
 import {
   ADULTS_MAX,
@@ -24,72 +23,79 @@ import {
   TITLE_MIN_LENGTH
 } from '../../../common/const.js';
 
-class CreateOfferDto {
+class UpdateOfferDto {
+  @IsOptional()
   @IsMongoId({message: getValidateMessage(ValidateTypeEnum.IsMongoId)})
-  public city!: string;
+  public city?: string;
 
+  @IsOptional()
   @MinLength(PREVIEW_MIN_LENGTH, {
     message: getValidateMessage(ValidateTypeEnum.MinLength, PREVIEW_MIN_LENGTH)
   })
-  public previewImage!: string;
+  public previewImage?: string;
 
+  @IsOptional()
   @ArrayMinSize(IMAGE_MIN_COUNT, {
     message: getValidateMessage(ValidateTypeEnum.ArrayMinSize, IMAGE_MIN_COUNT)
   })
   @ArrayMaxSize(IMAGE_MAX_COUNT, {
     message: getValidateMessage(ValidateTypeEnum.ArrayMaxSize, IMAGE_MAX_COUNT)
   })
-  public images!: string[];
+  public images?: string[];
 
+  @IsOptional()
   @MinLength(TITLE_MIN_LENGTH, {
     message: getValidateMessage(ValidateTypeEnum.MinLength, TITLE_MIN_LENGTH)
   })
   @MaxLength(TITLE_MAX_LENGTH, {
     message: getValidateMessage(ValidateTypeEnum.Maxlength, TITLE_MAX_LENGTH)
   })
-  public title!: string;
+  public title?: string;
 
+  @IsOptional()
   @IsBoolean({message: getValidateMessage(ValidateTypeEnum.IsBoolean)})
-  public isPremium!: boolean;
+  public isPremium?: boolean;
 
+  @IsOptional()
   @Min(RATING_MIN, {message: getValidateMessage(ValidateTypeEnum.Min, RATING_MIN)})
   @Max(RATING_MAX, {message: getValidateMessage(ValidateTypeEnum.Max, RATING_MAX)})
-  public rating!: number;
+  public rating?: number;
 
+  @IsOptional()
   @IsMongoId({message: getValidateMessage(ValidateTypeEnum.IsMongoId)})
-  public type!: string;
+  public type?: string;
 
+  @IsOptional()
   @Min(ROOMS_MIN, {message: getValidateMessage(ValidateTypeEnum.Min, ROOMS_MIN)})
   @Max(ROOMS_MAX, {message: getValidateMessage(ValidateTypeEnum.Max, ROOMS_MAX)})
-  public bedrooms!: number;
+  public bedrooms?: number;
 
+  @IsOptional()
   @Min(ADULTS_MIN, {message: getValidateMessage(ValidateTypeEnum.Min, ADULTS_MIN)})
   @Max(ADULTS_MAX, {message: getValidateMessage(ValidateTypeEnum.Max, ADULTS_MAX)})
-  public maxAdults!: number;
+  public maxAdults?: number;
 
+  @IsOptional()
   @Min(PRICE_MIN, {message: getValidateMessage(ValidateTypeEnum.Min, PRICE_MIN)})
   @Max(PRICE_MAX, {message: getValidateMessage(ValidateTypeEnum.Max, PRICE_MAX)})
-  public price!: number;
+  public price?: number;
 
+  @IsOptional()
   @IsMongoId({message: getValidateMessage(ValidateTypeEnum.IsMongoId), each: true})
-  public goods!: string[];
+  public goods?: string[];
 
-  @IsMongoId({message: getValidateMessage(ValidateTypeEnum.IsMongoId)})
-  public host!: string;
-
+  @IsOptional()
   @MinLength(DESCRIPTION_MIN_LENGTH, {
     message: getValidateMessage(ValidateTypeEnum.MinLength, DESCRIPTION_MIN_LENGTH)
   })
   @MaxLength(DESCRIPTION_MAX_LENGTH, {
     message: getValidateMessage(ValidateTypeEnum.Maxlength, DESCRIPTION_MAX_LENGTH)
   })
-  public description!: string;
+  public description?: string;
 
+  @IsOptional()
   @ValidateNested({message: getValidateMessage(ValidateTypeEnum.ValidateNested)})
-  public location!: Location;
-
-  @IsDateString({message: getValidateMessage(ValidateTypeEnum.IsDateString)})
-  public createdDate!: Date;
+  public location?: Location;
 }
 
-export default CreateOfferDto;
+export default UpdateOfferDto;
