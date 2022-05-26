@@ -31,6 +31,9 @@ import BuildingTypeController from './modules/building-type/building-type.contro
 import CityController from './modules/city/city.controller.js';
 import GoodController from './modules/good/good.controller.js';
 import UserController from './modules/user/user.controller.js';
+import CommentService from './modules/comment/comment.service.js';
+import {CommentServiceInterface} from './modules/comment/comment-service.interface.js';
+import {CommentEntity, CommentModel} from './modules/comment/comment.entity.js';
 
 const applicationContainer = new Container();
 
@@ -43,11 +46,13 @@ applicationContainer.bind<ModelType<CityEntity>>(Component.CityModel).toConstant
 applicationContainer.bind<ModelType<BuildingTypeEntity>>(Component.BuildingTypeModel).toConstantValue(BuildingTypeModel);
 applicationContainer.bind<ModelType<GoodEntity>>(Component.GoodModel).toConstantValue(GoodModel);
 applicationContainer.bind<ModelType<OfferEntity>>(Component.OfferModel).toConstantValue(OfferModel);
+applicationContainer.bind<ModelType<CommentEntity>>(Component.CommentModel).toConstantValue(CommentModel);
 applicationContainer.bind<UserServiceInterface>(Component.UserServiceInterface).to(UserService).inSingletonScope();
 applicationContainer.bind<CityServiceInterface>(Component.CityServiceInterface).to(CityService).inSingletonScope();
 applicationContainer.bind<BuildingTypeServiceInterface>(Component.BuildingTypeServiceInterface).to(BuildingTypeService).inSingletonScope();
 applicationContainer.bind<GoodServiceInterface>(Component.GoodServiceInterface).to(GoodService).inSingletonScope();
 applicationContainer.bind<OfferServiceInterface>(Component.OfferServiceInterface).to(OfferService).inSingletonScope();
+applicationContainer.bind<CommentServiceInterface>(Component.CommentServiceInterface).to(CommentService).inSingletonScope();
 applicationContainer.bind<ControllerInterface>(Component.OfferController).to(OfferController).inSingletonScope();
 applicationContainer.bind<ExceptionFilterInterface>(Component.ExceptionFilterInterface).to(ExceptionFilter).inSingletonScope();
 applicationContainer.bind<ControllerInterface>(Component.BuildingTypeController).to(BuildingTypeController).inSingletonScope();

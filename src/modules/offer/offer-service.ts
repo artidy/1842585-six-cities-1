@@ -43,6 +43,10 @@ class OfferService implements OfferServiceInterface {
   public async deleteById(id: string): Promise<void | null> {
     return this.modelOffer.findByIdAndDelete(id);
   }
+
+  public async exists(documentId: string): Promise<boolean> {
+    return (await this.modelOffer.exists({_id: documentId}) !== null);
+  }
 }
 
 export default OfferService;

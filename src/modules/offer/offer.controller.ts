@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import {Request, Response} from 'express';
 import {inject, injectable} from 'inversify';
-import {StatusCodes} from 'http-status-codes';
 
 import {Component} from '../../types/component.types.js';
 import {LoggerInterface} from '../../common/logger/logger.interface.js';
@@ -10,17 +9,25 @@ import {Controller} from '../../common/controller/controller.js';
 import {HttpMethod} from '../../types/http-method.enum.js';
 import CreateOfferDto from './dto/create-offer.dto.js';
 import {fillDTO} from '../../utils/functions.js';
-import HttpError from '../../common/errors/http-error.js';
 import OfferDto from './dto/offer.dto.js';
 import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectid.middleware.js';
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 import UpdateOfferDto from './dto/update-offer.dto.js';
+import {CommentServiceInterface} from '../comment/comment-service.interface.js';
+import CommentDto from '../comment/dto/comment.dto.js';
+import DocumentExistsMiddleware from '../../common/middlewares/document-exists.middleware.js';
+
+const ENTITY_OFFER_NAME = 'Предложение';
+const ENTITY_COMMENT_NAME = 'Комментарий';
+const PARAM_OFFER_ID = 'offerId';
+const PARAM_COMMENT_ID = 'commentId';
 
 @injectable()
 class OfferController extends Controller {
   constructor(
     @inject(Component.LoggerInterface) logger: LoggerInterface,
-    @inject(Component.OfferServiceInterface) private readonly offerService: OfferServiceInterface
+    @inject(Component.OfferServiceInterface) private readonly offerService: OfferServiceInterface,
+    @inject(Component.CommentServiceInterface) private readonly commentService: CommentServiceInterface
   ) {
     super(logger);
 
@@ -33,25 +40,72 @@ class OfferController extends Controller {
       middlewares: [new ValidateDtoMiddleware(CreateOfferDto)]
     });
     this.addRoute({
-      path: '/:offerId',
+      path: `/:${PARAM_OFFER_ID}`,
       method: HttpMethod.Get,
       handler: this.getOfferById,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')]
-    });
-    this.addRoute({
-      path: '/:offerId',
-      method: HttpMethod.Patch,
-      handler: this.updateOfferById,
       middlewares: [
-        new ValidateObjectIdMiddleware('offerId'),
-        new ValidateDtoMiddleware(UpdateOfferDto)
+        new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
+        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID)
       ]
     });
     this.addRoute({
-      path: '/:offerId',
+      path: `/:${PARAM_OFFER_ID}`,
+      method: HttpMethod.Patch,
+      handler: this.updateOfferById,
+      middlewares: [
+        new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
+        new ValidateDtoMiddleware(UpdateOfferDto),
+        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID)
+      ]
+    });
+    this.addRoute({
+      path: `/:${PARAM_OFFER_ID}`,
       method: HttpMethod.Delete,
       handler: this.deleteOfferById,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')]
+      middlewares: [
+        new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
+        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID)
+      ]
+    });
+    this.addRoute({
+      path: `/:${PARAM_OFFER_ID}/comments`,
+      method: HttpMethod.Post,
+      handler: this.addComment,
+      middlewares: [
+        new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
+        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID)
+      ]
+    });
+    this.addRoute({
+      path: `/:${PARAM_OFFER_ID}/comments`,
+      method: HttpMethod.Get,
+      handler: this.getOfferComments,
+      middlewares: [
+        new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
+        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID)
+      ]
+    });
+    this.addRoute({
+      path: `/:${PARAM_OFFER_ID}/comments/:${PARAM_COMMENT_ID}`,
+      method: HttpMethod.Patch,
+      handler: this.updateComment,
+      middlewares: [
+        new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
+        new ValidateObjectIdMiddleware(PARAM_COMMENT_ID),
+        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID),
+        new DocumentExistsMiddleware(this.commentService, ENTITY_COMMENT_NAME, PARAM_COMMENT_ID)
+      ]
+    });
+    this.addRoute({
+      path: `/:${PARAM_OFFER_ID}/comments/:${PARAM_COMMENT_ID}`,
+      method: HttpMethod.Delete,
+      handler: this.deleteComment,
+      middlewares: [
+        new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
+        new ValidateObjectIdMiddleware(PARAM_COMMENT_ID),
+        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID),
+        new DocumentExistsMiddleware(this.commentService, ENTITY_COMMENT_NAME, PARAM_COMMENT_ID)
+      ]
     });
   }
 
@@ -71,41 +125,41 @@ class OfferController extends Controller {
   public async getOfferById({params}: Request, res: Response): Promise<void> {
     const offer = await this.offerService.findById(params.offerId);
 
-    if (!offer) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Предложение с идентификатором ${params.offerId} не найдено.`,
-        'OfferController'
-      );
-    }
-
     this.ok(res, fillDTO(OfferDto, offer));
   }
 
   public async updateOfferById({params, body}: Request, res: Response): Promise<void> {
     const offer = await this.offerService.updateById(params.offerId, body);
 
-    if (!offer) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Предложение с идентификатором ${params.offerId} не найдено.`,
-        'OfferController'
-      );
-    }
-
     this.ok(res, fillDTO(OfferDto, offer));
   }
 
   public async deleteOfferById({params}: Request, res: Response): Promise<void> {
-    const offer = await this.offerService.deleteById(params.offerId);
+    await this.offerService.deleteById(params.offerId);
 
-    if (!offer) {
-      throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `Предложение с идентификатором ${params.offerId} не найдено.`,
-        'OfferController'
-      );
-    }
+    this.noContent(res);
+  }
+
+  public async addComment({params, body}: Request, res: Response): Promise<void> {
+    const result = await this.commentService.create({...body, offerId: params.offerId});
+
+    this.created(res, fillDTO(CommentDto, result));
+  }
+
+  public async getOfferComments({params}: Request, res: Response): Promise<void> {
+    const result = await this.commentService.findByOfferId(params.offerId);
+
+    this.ok(res, fillDTO(CommentDto, result));
+  }
+
+  public async updateComment({params, body}: Request, res: Response): Promise<void> {
+    const result = await this.commentService.updateById(params.commentId, body);
+
+    this.ok(res, fillDTO(CommentDto, result));
+  }
+
+  public async deleteComment({params}: Request, res: Response): Promise<void> {
+    await this.commentService.deleteById(params.commentId);
 
     this.noContent(res);
   }
