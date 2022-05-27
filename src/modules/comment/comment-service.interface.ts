@@ -3,6 +3,7 @@ import {DocumentType} from '@typegoose/typegoose';
 import {CommentEntity} from './comment.entity.js';
 import CreateCommentDto from './dto/create-comment.dto.js';
 import UpdateCommentDto from './dto/update-comment.dto.js';
+import {DocumentExistsInterface} from '../../types/document-exists.interface.js';
 
 interface CommentServiceInterface extends DocumentExistsInterface{
   create(dto: CreateCommentDto): Promise<DocumentType<CommentEntity>>;

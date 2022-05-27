@@ -2,7 +2,8 @@ import {NextFunction, Request, Response} from 'express';
 
 import {MiddlewareInterface} from '../../types/middleware.interface.js';
 import HttpError from '../errors/http-error.js';
-import {StatusCodes} from 'http-status-codes/build/es/index.js';
+import {StatusCodes} from 'http-status-codes';
+import {DocumentExistsInterface} from '../../types/document-exists.interface.js';
 
 class DocumentExistsMiddleware implements MiddlewareInterface {
   constructor(

@@ -11,6 +11,7 @@ import CreateOfferDto from './dto/create-offer.dto.js';
 import UpdateOfferDto from './dto/update-offer.dto.js';
 
 const POPULATE_FIELDS = ['city', 'type', 'goods', 'host'];
+const MAX_OFFERS_COUNT = 50;
 
 @injectable()
 class OfferService implements OfferServiceInterface {
@@ -20,7 +21,21 @@ class OfferService implements OfferServiceInterface {
   ) {}
 
   public async find(): Promise<DocumentType<OfferEntity>[]> {
-    return this.modelOffer.find();
+    return this.modelOffer.aggregate([
+      { $limit: MAX_OFFERS_COUNT },
+      {
+        $lookup: {
+          from: 'comments',
+          localField: '_id',
+          foreignField: 'offer_id',
+          as: 'comments'
+        }
+      },
+      {
+        $addFields: { commentCount: { $size: '$comments' }}
+      },
+      { $unset: 'comments'}
+    ]).exec();
   }
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {

@@ -1,7 +1,9 @@
 import {Base, TimeStamps} from '@typegoose/typegoose/lib/defaultClasses.js';
-import {getModelForClass, ModelOptions, prop} from '@typegoose/typegoose';
+import typegoose, {getModelForClass} from '@typegoose/typegoose';
 
 import CreateCommentDto from './dto/create-comment.dto.js';
+
+const {ModelOptions, prop} = typegoose;
 
 export interface CommentEntity extends Base {}
 

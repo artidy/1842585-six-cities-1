@@ -110,7 +110,11 @@ class OfferController extends Controller {
   }
 
   public async index(_req: Request, res: Response): Promise<void> {
-    this.ok(res, fillDTO(OfferDto, await this.offerService.find()));
+    const result = await this.offerService.find();
+
+    console.log(result);
+
+    this.ok(res, fillDTO(OfferDto, result));
   }
 
   public async create(
