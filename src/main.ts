@@ -34,6 +34,10 @@ import UserController from './modules/user/user.controller.js';
 import CommentService from './modules/comment/comment.service.js';
 import {CommentServiceInterface} from './modules/comment/comment-service.interface.js';
 import {CommentEntity, CommentModel} from './modules/comment/comment.entity.js';
+import FavoriteService from './modules/favorite/favorite.service.js';
+import {FavoriteServiceInterface} from './modules/favorite/favorite-service.interface.js';
+import FavoriteController from './modules/favorite/favorite.controller.js';
+import {FavoriteEntity, FavoriteModel} from './modules/favorite/favorite.entity.js';
 
 const applicationContainer = new Container();
 
@@ -47,18 +51,21 @@ applicationContainer.bind<ModelType<BuildingTypeEntity>>(Component.BuildingTypeM
 applicationContainer.bind<ModelType<GoodEntity>>(Component.GoodModel).toConstantValue(GoodModel);
 applicationContainer.bind<ModelType<OfferEntity>>(Component.OfferModel).toConstantValue(OfferModel);
 applicationContainer.bind<ModelType<CommentEntity>>(Component.CommentModel).toConstantValue(CommentModel);
+applicationContainer.bind<ModelType<FavoriteEntity>>(Component.FavoriteModel).toConstantValue(FavoriteModel);
 applicationContainer.bind<UserServiceInterface>(Component.UserServiceInterface).to(UserService).inSingletonScope();
 applicationContainer.bind<CityServiceInterface>(Component.CityServiceInterface).to(CityService).inSingletonScope();
 applicationContainer.bind<BuildingTypeServiceInterface>(Component.BuildingTypeServiceInterface).to(BuildingTypeService).inSingletonScope();
 applicationContainer.bind<GoodServiceInterface>(Component.GoodServiceInterface).to(GoodService).inSingletonScope();
 applicationContainer.bind<OfferServiceInterface>(Component.OfferServiceInterface).to(OfferService).inSingletonScope();
 applicationContainer.bind<CommentServiceInterface>(Component.CommentServiceInterface).to(CommentService).inSingletonScope();
+applicationContainer.bind<FavoriteServiceInterface>(Component.FavoriteServiceInterface).to(FavoriteService).inSingletonScope();
 applicationContainer.bind<ControllerInterface>(Component.OfferController).to(OfferController).inSingletonScope();
 applicationContainer.bind<ExceptionFilterInterface>(Component.ExceptionFilterInterface).to(ExceptionFilter).inSingletonScope();
 applicationContainer.bind<ControllerInterface>(Component.BuildingTypeController).to(BuildingTypeController).inSingletonScope();
 applicationContainer.bind<ControllerInterface>(Component.CityController).to(CityController).inSingletonScope();
 applicationContainer.bind<ControllerInterface>(Component.GoodController).to(GoodController).inSingletonScope();
 applicationContainer.bind<ControllerInterface>(Component.UserController).to(UserController).inSingletonScope();
+applicationContainer.bind<ControllerInterface>(Component.FavoriteController).to(FavoriteController).inSingletonScope();
 
 const application = applicationContainer.get<Application>(Component.Application);
 

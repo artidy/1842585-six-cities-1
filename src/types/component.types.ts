@@ -8,6 +8,7 @@ const Component = {
   GoodModel: Symbol.for('GoodModel'),
   OfferModel: Symbol.for('OfferModel'),
   CommentModel: Symbol.for('CommentModel'),
+  FavoriteModel: Symbol.for('FavoriteModel'),
   BuildingTypeModel: Symbol.for('BuildingTypeModel'),
   UserServiceInterface: Symbol.for('UserServiceInterface'),
   CityServiceInterface: Symbol.for('CityServiceInterface'),
@@ -17,10 +18,12 @@ const Component = {
   ExceptionFilterInterface: Symbol.for('ExceptionFilterInterface'),
   BuildingTypeController: Symbol.for('BuildingTypeController'),
   CommentServiceInterface: Symbol.for('CommentServiceInterface'),
+  FavoriteServiceInterface: Symbol.for('FavoriteServiceInterface'),
   CityController: Symbol.for('CityController'),
   GoodController: Symbol.for('GoodController'),
   OfferController: Symbol.for('OfferController'),
-  UserController: Symbol.for('UserController')
+  UserController: Symbol.for('UserController'),
+  FavoriteController: Symbol.for('FavoriteController')
 } as const;
 
 export {Component};
