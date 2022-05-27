@@ -13,11 +13,10 @@ export interface CommentEntity extends Base {}
   }
 })
 export class CommentEntity extends TimeStamps {
-  constructor({text, rating, offerId, userId}: CreateCommentDto) {
+  constructor({text}: CreateCommentDto, offerId: string, userId: string) {
     super();
 
     this.text = text;
-    this.rating = rating;
     this.offerId = offerId;
     this.userId = userId;
   }
@@ -25,7 +24,7 @@ export class CommentEntity extends TimeStamps {
   @prop({required: true})
   public text!: string;
 
-  @prop({required: true})
+  @prop({default: 0})
   public rating!: number;
 
   @prop({required: true})

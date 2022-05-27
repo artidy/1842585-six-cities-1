@@ -6,7 +6,7 @@ import UpdateCommentDto from './dto/update-comment.dto.js';
 import {DocumentExistsInterface} from '../../types/document-exists.interface.js';
 
 interface CommentServiceInterface extends DocumentExistsInterface{
-  create(dto: CreateCommentDto): Promise<DocumentType<CommentEntity>>;
+  create(dto: CreateCommentDto, userId: string, offerId: string): Promise<DocumentType<CommentEntity>>;
   findByOfferId(id: string): Promise<DocumentType<CommentEntity>[]>;
   updateById(id: string, dto: UpdateCommentDto): Promise<DocumentType<CommentEntity> | null>;
   deleteById(id: string): Promise<void | null>;

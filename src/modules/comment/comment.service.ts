@@ -18,8 +18,8 @@ class CommentService implements CommentServiceInterface {
     @inject(Component.OfferServiceInterface) private readonly offerService: OfferServiceInterface
   ) {}
 
-  public async create(dto: CreateCommentDto): Promise<DocumentType<CommentEntity>> {
-    const result = await this.commentModel.create(dto);
+  public async create(dto: CreateCommentDto, userId: string, offerId: string): Promise<DocumentType<CommentEntity>> {
+    const result = await this.commentModel.create({dto, userId, offerId});
 
     await this.offerService.incCommentCount(result.offerId);
     this.logger.info(`Добавлен новый комментарий с id: ${result.id} к посту с id: ${result.offerId}`);

@@ -147,7 +147,7 @@ class OfferController extends Controller {
   }
 
   public async addComment({params, body}: Request, res: Response): Promise<void> {
-    const result = await this.commentService.create({...body, offerId: params.offerId});
+    const result = await this.commentService.create(body, params.userId, params.offerId);
 
     this.created(res, fillDTO(CommentDto, result));
   }
