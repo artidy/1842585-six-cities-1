@@ -67,6 +67,8 @@ class OfferController extends Controller {
         new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID)
       ]
     });
+
+    this.logger.info('Добавление роутов для комментариев...');
     this.addRoute({
       path: `/:${PARAM_OFFER_ID}/comments`,
       method: HttpMethod.Post,

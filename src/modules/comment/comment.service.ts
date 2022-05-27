@@ -8,17 +8,20 @@ import {LoggerInterface} from '../../common/logger/logger.interface.js';
 import {CommentEntity} from './comment.entity.js';
 import CreateCommentDto from './dto/create-comment.dto.js';
 import UpdateCommentDto from './dto/update-comment.dto.js';
+import {OfferServiceInterface} from '../offer/offer-service.interface.js';
 
 @injectable()
 class CommentService implements CommentServiceInterface {
   constructor(
     @inject(Component.LoggerInterface) private logger: LoggerInterface,
-    @inject(Component.CommentModel) private readonly commentModel: ModelType<CommentEntity>
+    @inject(Component.CommentModel) private readonly commentModel: ModelType<CommentEntity>,
+    @inject(Component.OfferServiceInterface) private readonly offerService: OfferServiceInterface
   ) {}
 
   public async create(dto: CreateCommentDto): Promise<DocumentType<CommentEntity>> {
     const result = await this.commentModel.create(dto);
 
+    await this.offerService.incCommentCount(result.offerId);
     this.logger.info(`Добавлен новый комментарий с id: ${result.id} к посту с id: ${result.offerId}`);
 
     return result;
@@ -33,7 +36,11 @@ class CommentService implements CommentServiceInterface {
   }
 
   public async deleteById(id: string): Promise<void | null> {
-    return this.commentModel.findByIdAndDelete(id);
+    const result = await this.commentModel.findByIdAndDelete(id);
+
+    if (result) {
+      await this.offerService.decCommentCount(result.offerId);
+    }
   }
 
   public async exists(documentId: string): Promise<boolean> {

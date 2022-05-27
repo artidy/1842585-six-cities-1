@@ -10,6 +10,8 @@ interface OfferServiceInterface extends DocumentExistsInterface{
   findById(id: string): Promise<DocumentType<OfferEntity> | null>;
   updateById(id: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>;
   deleteById(id: string): Promise<void | null>;
+  incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null>;
+  decCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null>;
 }
 
 export {OfferServiceInterface};

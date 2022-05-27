@@ -12,6 +12,7 @@ import UpdateOfferDto from './dto/update-offer.dto.js';
 
 const POPULATE_FIELDS = ['city', 'type', 'goods', 'host'];
 const MAX_OFFERS_COUNT = 50;
+const ADD_COMMENT_COUNT = 1;
 
 @injectable()
 class OfferService implements OfferServiceInterface {
@@ -21,21 +22,7 @@ class OfferService implements OfferServiceInterface {
   ) {}
 
   public async find(): Promise<DocumentType<OfferEntity>[]> {
-    return this.modelOffer.aggregate([
-      { $limit: MAX_OFFERS_COUNT },
-      {
-        $lookup: {
-          from: 'comments',
-          localField: '_id',
-          foreignField: 'offer_id',
-          as: 'comments'
-        }
-      },
-      {
-        $addFields: { commentCount: { $size: '$comments' }}
-      },
-      { $unset: 'comments'}
-    ]).exec();
+    return this.modelOffer.find().limit(MAX_OFFERS_COUNT).exec();
   }
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
@@ -61,6 +48,14 @@ class OfferService implements OfferServiceInterface {
 
   public async exists(documentId: string): Promise<boolean> {
     return (await this.modelOffer.exists({_id: documentId}) !== null);
+  }
+
+  public async incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.modelOffer.findByIdAndUpdate(offerId, {'$inc': {commentCount: ADD_COMMENT_COUNT}}).exec();
+  }
+
+  public async decCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.modelOffer.findByIdAndUpdate(offerId, {'$dec': {commentCount: ADD_COMMENT_COUNT}}).exec();
   }
 }
 
