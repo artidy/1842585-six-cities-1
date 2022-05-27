@@ -21,6 +21,7 @@ const ENTITY_OFFER_NAME = 'Предложение';
 const ENTITY_COMMENT_NAME = 'Комментарий';
 const PARAM_OFFER_ID = 'offerId';
 const PARAM_COMMENT_ID = 'commentId';
+const USER_ID = '62743c1be73040cb770cb466';
 
 @injectable()
 class OfferController extends Controller {
@@ -95,7 +96,8 @@ class OfferController extends Controller {
         new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
         new ValidateObjectIdMiddleware(PARAM_COMMENT_ID),
         new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID),
-        new DocumentExistsMiddleware(this.commentService, ENTITY_COMMENT_NAME, PARAM_COMMENT_ID)
+        new DocumentExistsMiddleware(this.commentService, ENTITY_COMMENT_NAME, PARAM_COMMENT_ID),
+        new ValidateDtoMiddleware(UpdateOfferDto)
       ]
     });
     this.addRoute({
@@ -113,8 +115,6 @@ class OfferController extends Controller {
 
   public async index(_req: Request, res: Response): Promise<void> {
     const result = await this.offerService.find();
-
-    console.log(result);
 
     this.ok(res, fillDTO(OfferDto, result));
   }
@@ -147,7 +147,7 @@ class OfferController extends Controller {
   }
 
   public async addComment({params, body}: Request, res: Response): Promise<void> {
-    const result = await this.commentService.create(body, params.userId, params.offerId);
+    const result = await this.commentService.create(body, USER_ID, params.offerId);
 
     this.created(res, fillDTO(CommentDto, result));
   }

@@ -24,7 +24,7 @@ class FavoriteService implements FavoriteServiceInterface {
   }
 
   public async findByUserId(id: string): Promise<DocumentType<FavoriteEntity>[]> {
-    return this.favoriteModel.find({userId: id});
+    return this.favoriteModel.find({userId: id}).populate('offerId').exec();
   }
 
   public async deleteById(id: string): Promise<void | null> {

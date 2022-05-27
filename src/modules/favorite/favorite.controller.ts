@@ -16,6 +16,7 @@ import DocumentExistsMiddleware from '../../common/middlewares/document-exists.m
 
 const PARAM_FAVORITE_ID = 'favoriteId';
 const ENTITY_NAME = 'Избранное';
+const USER_ID = '62743c1be73040cb770cb466';
 
 @injectable()
 class FavoriteController extends Controller {
@@ -44,16 +45,16 @@ class FavoriteController extends Controller {
     });
   }
 
-  public async index({params}: Request, res: Response): Promise<void> {
-    const result = await this.favoriteService.findByUserId(params.userId);
+  public async index(_req: Request, res: Response): Promise<void> {
+    const result = await this.favoriteService.findByUserId(USER_ID);
 
     this.ok(res, fillDTO(FavoriteDto, result));
   }
 
-  public async create({params, body}: Request<Record<string, string>, Record<string, unknown>, CreateFavoriteDto>,
+  public async create({body}: Request<Record<string, string>, Record<string, unknown>, CreateFavoriteDto>,
     res: Response): Promise<void> {
 
-    const result = await this.favoriteService.create(body, params.userId);
+    const result = await this.favoriteService.create(body, USER_ID);
 
     this.logger.info(`Предложение с id: ${result.offerId}`);
 

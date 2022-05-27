@@ -19,28 +19,25 @@ class CommentService implements CommentServiceInterface {
   ) {}
 
   public async create(dto: CreateCommentDto, userId: string, offerId: string): Promise<DocumentType<CommentEntity>> {
-    const result = await this.commentModel.create({dto, userId, offerId});
+    const result = await this.commentModel.create({...dto, userId, offerId});
 
-    await this.offerService.incCommentCount(result.offerId);
-    this.logger.info(`Добавлен новый комментарий с id: ${result.id} к посту с id: ${result.offerId}`);
+    await this.offerService.incCommentCount(offerId);
+    this.logger.info(`Добавлен новый комментарий с id: ${offerId} к посту с id: ${userId}`);
 
     return result;
   }
 
   public async findByOfferId(id: string): Promise<DocumentType<CommentEntity>[]> {
-    return this.commentModel.find({offerId: id});
+    return this.commentModel.find({offerId: id}).populate('userId').exec();
   }
 
   public async updateById(id: string, dto: UpdateCommentDto): Promise<DocumentType<CommentEntity> | null> {
-    return this.commentModel.findByIdAndUpdate(id, dto);
+    return this.commentModel.findByIdAndUpdate(id, dto, {new: true}).populate('userId').exec();
   }
 
   public async deleteById(id: string): Promise<void | null> {
-    const result = await this.commentModel.findByIdAndDelete(id);
-
-    if (result) {
-      await this.offerService.decCommentCount(result.offerId);
-    }
+    await this.commentModel.findByIdAndDelete(id);
+    await this.offerService.decCommentCount(id);
   }
 
   public async exists(documentId: string): Promise<boolean> {

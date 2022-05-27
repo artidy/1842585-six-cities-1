@@ -55,7 +55,7 @@ class OfferService implements OfferServiceInterface {
   }
 
   public async decCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.modelOffer.findByIdAndUpdate(offerId, {'$dec': {commentCount: ADD_COMMENT_COUNT}}).exec();
+    return this.modelOffer.findByIdAndUpdate(offerId, {'$inc': {commentCount: -ADD_COMMENT_COUNT}}).exec();
   }
 }
 

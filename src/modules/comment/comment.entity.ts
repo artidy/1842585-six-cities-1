@@ -1,7 +1,8 @@
 import {Base, TimeStamps} from '@typegoose/typegoose/lib/defaultClasses.js';
-import typegoose, {getModelForClass} from '@typegoose/typegoose';
+import typegoose, {getModelForClass, Ref} from '@typegoose/typegoose';
 
-import CreateCommentDto from './dto/create-comment.dto.js';
+import {UserEntity} from '../user/user.entity.js';
+import {OfferEntity} from '../offer/offer.entity.js';
 
 const {ModelOptions, prop} = typegoose;
 
@@ -13,25 +14,17 @@ export interface CommentEntity extends Base {}
   }
 })
 export class CommentEntity extends TimeStamps {
-  constructor({text}: CreateCommentDto, offerId: string, userId: string) {
-    super();
-
-    this.text = text;
-    this.offerId = offerId;
-    this.userId = userId;
-  }
-
   @prop({required: true})
   public text!: string;
 
   @prop({default: 0})
   public rating!: number;
 
-  @prop({required: true})
-  public offerId!: string;
+  @prop({ref: OfferEntity, required: true})
+  public offerId!: Ref<OfferEntity>;
 
-  @prop({required: true})
-  public userId!: string;
+  @prop({ref: UserEntity, required: true})
+  public userId!: Ref<UserEntity>;
 }
 
 export const CommentModel = getModelForClass(CommentEntity);

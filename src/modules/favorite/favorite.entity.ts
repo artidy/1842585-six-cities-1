@@ -1,7 +1,8 @@
 import {Base, TimeStamps} from '@typegoose/typegoose/lib/defaultClasses.js';
-import typegoose, {getModelForClass} from '@typegoose/typegoose';
+import typegoose, {getModelForClass, Ref} from '@typegoose/typegoose';
 
-import CreateFavoriteDto from './dto/create-favorite.dto.js';
+import {OfferEntity} from '../offer/offer.entity.js';
+import {UserEntity} from '../user/user.entity.js';
 
 const {ModelOptions, prop} = typegoose;
 
@@ -13,18 +14,11 @@ export interface FavoriteEntity extends Base {}
   }
 })
 export class FavoriteEntity extends TimeStamps {
-  constructor({offerId}: CreateFavoriteDto, userId: string) {
-    super();
+  @prop({ref: OfferEntity, required: true})
+  public offerId!: Ref<OfferEntity>;
 
-    this.offerId = offerId;
-    this.userId = userId;
-  }
-
-  @prop({required: true})
-  public offerId!: string;
-
-  @prop({required: true})
-  public userId!: string;
+  @prop({ref: UserEntity, required: true})
+  public userId!: Ref<UserEntity>;
 }
 
 export const FavoriteModel = getModelForClass(FavoriteEntity);
