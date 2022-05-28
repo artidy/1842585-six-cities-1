@@ -7,18 +7,23 @@ const Component = {
   CityModel: Symbol.for('CityModel'),
   GoodModel: Symbol.for('GoodModel'),
   OfferModel: Symbol.for('OfferModel'),
+  CommentModel: Symbol.for('CommentModel'),
+  FavoriteModel: Symbol.for('FavoriteModel'),
   BuildingTypeModel: Symbol.for('BuildingTypeModel'),
   UserServiceInterface: Symbol.for('UserServiceInterface'),
   CityServiceInterface: Symbol.for('CityServiceInterface'),
   BuildingTypeServiceInterface: Symbol.for('BuildingTypeServiceInterface'),
   GoodServiceInterface: Symbol.for('GoodServiceInterface'),
   OfferServiceInterface: Symbol.for('OfferServiceInterface'),
-  OfferController: Symbol.for('OfferController'),
   ExceptionFilterInterface: Symbol.for('ExceptionFilterInterface'),
   BuildingTypeController: Symbol.for('BuildingTypeController'),
+  CommentServiceInterface: Symbol.for('CommentServiceInterface'),
+  FavoriteServiceInterface: Symbol.for('FavoriteServiceInterface'),
   CityController: Symbol.for('CityController'),
   GoodController: Symbol.for('GoodController'),
-  UserController: Symbol.for('UserController')
+  OfferController: Symbol.for('OfferController'),
+  UserController: Symbol.for('UserController'),
+  FavoriteController: Symbol.for('FavoriteController')
 } as const;
 
 export {Component};
