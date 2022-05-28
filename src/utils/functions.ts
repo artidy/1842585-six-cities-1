@@ -1,4 +1,6 @@
 import {ClassConstructor, plainToInstance} from 'class-transformer';
+import jose from 'jose';
+import crypto from 'crypto';
 
 import {DatabaseOptions} from '../types/database-options.js';
 import ValidateTypeEnum from '../types/validate-type.enum.js';
@@ -80,6 +82,17 @@ const getValidateMessage = (validateType: ValidateTypeEnum, value: string | numb
   }
 };
 
+const createJWT = async (
+  algorithm: string,
+  jwtSecret: string,
+  payload: object,
+  expirationTime = '30d'): Promise<string> =>
+  new jose.SignJWT({...payload})
+    .setProtectedHeader({alg: algorithm})
+    .setIssuedAt()
+    .setExpirationTime(expirationTime)
+    .sign(crypto.createSecretKey(jwtSecret, 'utf-8'));
+
 export {
   generateRandomValue,
   getRandomItem,
@@ -88,5 +101,6 @@ export {
   getMongodbURI,
   fillDTO,
   createErrorObject,
-  getValidateMessage
+  getValidateMessage,
+  createJWT
 };
