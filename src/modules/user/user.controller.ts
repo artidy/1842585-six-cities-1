@@ -53,6 +53,12 @@ class UserController extends Controller {
       middlewares: [new ValidateDtoMiddleware(UpdateTokenDto)]
     });
     this.addRoute({
+      path: '/logout',
+      method: HttpMethod.Post,
+      handler: this.logout,
+      middlewares: [new ValidateDtoMiddleware(UpdateTokenDto)]
+    });
+    this.addRoute({
       path: '/:userId/avatar',
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
@@ -118,6 +124,12 @@ class UserController extends Controller {
     await this.tokenService.create(tokens);
 
     this.ok(res, fillDTO(LoggedUserDto, {...tokens, email: body.email}));
+  }
+
+  public async logout({body}: Request<Record<string, unknown>, UpdateTokenDto>, res: Response) {
+    await this.tokenService.deleteByRefreshToken(body.refreshToken);
+
+    this.noContent(res);
   }
 
   public async uploadAvatar({file}: Request, res: Response) {

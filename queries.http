@@ -94,3 +94,12 @@ Content-Type: application/json
   "email": "antonio@example.ru",
   "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjYyNzQzYzFiZTczMDQwY2I3NzBjYjQ2NiIsImVtYWlsIjoiYW50b25pb0BleGFtcGxlLnJ1IiwiaWF0IjoxNjUzNzUxNDE5LCJleHAiOjE2NTYzNDM0MTl9.rf31CryR2xU6c2sGJxDPPRtf63SmDsM7mBPwmQiw2Hg"
 }
+
+### Отзыв токенов - логаут
+POST http://localhost:4000/users/logout
+Content-Type: application/json
+
+{
+  "email": "antonio@example.ru",
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjYyOTI0MWJjZDMwOWU1NmI3NWZjYjZkNyIsImVtYWlsIjoiYXBAZGV2YW5keS5tZSIsImlhdCI6MTY1Mzc1MjMzMSwiZXhwIjoxNjU2MzQ0MzMxfQ.2hlGqeIk6KrMTK62uPGgbm1tzq_BgKowC3KUOryOxu0"
+}
