@@ -13,6 +13,7 @@ import HttpError from '../../common/errors/http-error.js';
 import CreateCityDto from './dto/create-city.dto.js';
 import CityDto from './dto/city.dto.js';
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
+import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
 
 @injectable()
 class CityController extends Controller {
@@ -28,7 +29,10 @@ class CityController extends Controller {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateCityDto)]
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDtoMiddleware(CreateCityDto)
+      ]
     });
   }
 

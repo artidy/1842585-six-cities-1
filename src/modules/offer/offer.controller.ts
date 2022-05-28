@@ -16,12 +16,12 @@ import UpdateOfferDto from './dto/update-offer.dto.js';
 import {CommentServiceInterface} from '../comment/comment-service.interface.js';
 import CommentDto from '../comment/dto/comment.dto.js';
 import DocumentExistsMiddleware from '../../common/middlewares/document-exists.middleware.js';
+import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
 
 const ENTITY_OFFER_NAME = 'Предложение';
 const ENTITY_COMMENT_NAME = 'Комментарий';
 const PARAM_OFFER_ID = 'offerId';
 const PARAM_COMMENT_ID = 'commentId';
-const USER_ID = '62743c1be73040cb770cb466';
 
 @injectable()
 class OfferController extends Controller {
@@ -38,7 +38,10 @@ class OfferController extends Controller {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateOfferDto)]
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDtoMiddleware(CreateOfferDto)
+      ]
     });
     this.addRoute({
       path: `/:${PARAM_OFFER_ID}`,
@@ -54,6 +57,7 @@ class OfferController extends Controller {
       method: HttpMethod.Patch,
       handler: this.updateOfferById,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
         new ValidateDtoMiddleware(UpdateOfferDto),
         new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID)
@@ -64,6 +68,7 @@ class OfferController extends Controller {
       method: HttpMethod.Delete,
       handler: this.deleteOfferById,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
         new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID)
       ]
@@ -75,6 +80,7 @@ class OfferController extends Controller {
       method: HttpMethod.Post,
       handler: this.addComment,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
         new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID)
       ]
@@ -93,6 +99,7 @@ class OfferController extends Controller {
       method: HttpMethod.Patch,
       handler: this.updateComment,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
         new ValidateObjectIdMiddleware(PARAM_COMMENT_ID),
         new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID),
@@ -105,6 +112,7 @@ class OfferController extends Controller {
       method: HttpMethod.Delete,
       handler: this.deleteComment,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
         new ValidateObjectIdMiddleware(PARAM_COMMENT_ID),
         new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID),
@@ -147,7 +155,7 @@ class OfferController extends Controller {
   }
 
   public async addComment({params, body}: Request, res: Response): Promise<void> {
-    const result = await this.commentService.create(body, USER_ID, params.offerId);
+    const result = await this.commentService.create(body, res.locals.user.id, params.offerId);
 
     this.created(res, fillDTO(CommentDto, result));
   }

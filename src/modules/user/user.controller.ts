@@ -20,6 +20,7 @@ import LoginUserDto from './dto/login-user.dto.js';
 import {JWT_ALGORITHM} from './user.constant.js';
 import LoggedUserDto from './dto/logged-user.dto.js';
 import {TokenServiceInterface} from '../token/token-service.interface.js';
+import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
 
 @injectable()
 class UserController extends Controller {
@@ -50,6 +51,7 @@ class UserController extends Controller {
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('userId'),
         new UploadFileMiddleware(this.config.get('UPLOAD_DIR'), 'avatar')
       ]
@@ -108,8 +110,8 @@ class UserController extends Controller {
     this.ok(res, fillDTO(LoggedUserDto, {token, refreshToken, email: user.email}));
   }
 
-  public async uploadAvatar({params, file}: Request, res: Response) {
-    const result = await this.userService.updateById(params.userId, {avatarUrl: file?.path});
+  public async uploadAvatar({file}: Request, res: Response) {
+    const result = await this.userService.updateById(res.locals.user.id, {avatarUrl: file?.path});
 
     this.created(res, fillDTO(UserDto, result));
   }
