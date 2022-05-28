@@ -7,7 +7,7 @@ import {Controller} from '../../common/controller/controller.js';
 import {Component} from '../../types/component.types.js';
 import {LoggerInterface} from '../../common/logger/logger.interface.js';
 import {UserServiceInterface} from './user-service.interface.js';
-import {createJWT, fillDTO} from '../../utils/functions.js';
+import {fillDTO} from '../../utils/functions.js';
 import HttpError from '../../common/errors/http-error.js';
 import CreateUserDto from './dto/create-user.dto.js';
 import UserDto from './dto/user.dto.js';
@@ -17,10 +17,10 @@ import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middlew
 import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectid.middleware.js';
 import UploadFileMiddleware from '../../common/middlewares/upload-file.middleware.js';
 import LoginUserDto from './dto/login-user.dto.js';
-import {JWT_ALGORITHM} from './user.constant.js';
 import LoggedUserDto from './dto/logged-user.dto.js';
 import {TokenServiceInterface} from '../token/token-service.interface.js';
 import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
+import UpdateTokenDto from '../token/dto/update-token.dto.js';
 
 @injectable()
 class UserController extends Controller {
@@ -45,6 +45,12 @@ class UserController extends Controller {
       method: HttpMethod.Post,
       handler: this.login,
       middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
+    });
+    this.addRoute({
+      path: '/refresh',
+      method: HttpMethod.Post,
+      handler: this.refreshTokens,
+      middlewares: [new ValidateDtoMiddleware(UpdateTokenDto)]
     });
     this.addRoute({
       path: '/:userId/avatar',
@@ -90,24 +96,28 @@ class UserController extends Controller {
       );
     }
 
-    const payload = {id: user.id, email: user.email};
+    const tokens = await this.tokenService.generateTokens({id: user.id, email: user.email});
 
-    const token = await createJWT(
-      JWT_ALGORITHM,
-      this.config.get('JWT_SECRET'),
-      payload,
-      this.config.get('TOKEN_EXPIRATION_TIME')
-    );
+    await this.tokenService.create(tokens);
 
-    const refreshToken = await createJWT(
-      JWT_ALGORITHM,
-      this.config.get('JWT_REFRESH_SECRET'),
-      payload
-    );
+    this.ok(res, fillDTO(LoggedUserDto, {...tokens, email: user.email}));
+  }
 
-    await this.tokenService.create({token, refreshToken});
+  public async refreshTokens({body}: Request<Record<string, unknown>, UpdateTokenDto>, res: Response) {
+    const tokens = await this.tokenService.updateTokens(body.refreshToken);
 
-    this.ok(res, fillDTO(LoggedUserDto, {token, refreshToken, email: user.email}));
+    if (!tokens) {
+      throw new HttpError(
+        StatusCodes.UNAUTHORIZED,
+        'Неудачная попытка обновления токена',
+        'UserController'
+      );
+    }
+
+    await this.tokenService.deleteByRefreshToken(body.refreshToken);
+    await this.tokenService.create(tokens);
+
+    this.ok(res, fillDTO(LoggedUserDto, {...tokens, email: body.email}));
   }
 
   public async uploadAvatar({file}: Request, res: Response) {

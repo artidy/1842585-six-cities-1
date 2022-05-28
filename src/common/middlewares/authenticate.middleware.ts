@@ -1,11 +1,10 @@
 import {NextFunction, Request, Response} from 'express';
-import * as jose from 'jose';
-import {createSecretKey} from 'crypto';
 import {StatusCodes} from 'http-status-codes';
 
 import {MiddlewareInterface} from '../../types/middleware.interface.js';
 import {TokenServiceInterface} from '../../modules/token/token-service.interface.js';
 import HttpError from '../errors/http-error.js';
+import {verifyToken} from '../../utils/functions.js';
 
 class AuthenticateMiddleware implements MiddlewareInterface {
   constructor(
@@ -22,7 +21,7 @@ class AuthenticateMiddleware implements MiddlewareInterface {
     const [, token] = authorizationHeader;
 
     try {
-      const {payload} = await jose.jwtVerify(token, createSecretKey(this.jwtSecret, 'utf-8'));
+      const payload = await verifyToken(token, this.jwtSecret);
       const result = await this.tokenService.findByToken(token);
 
       if (!result) {
