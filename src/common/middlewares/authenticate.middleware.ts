@@ -1,9 +1,7 @@
 import {NextFunction, Request, Response} from 'express';
-import {StatusCodes} from 'http-status-codes';
 
 import {MiddlewareInterface} from '../../types/middleware.interface.js';
 import {TokenServiceInterface} from '../../modules/token/token-service.interface.js';
-import HttpError from '../errors/http-error.js';
 import {verifyToken} from '../../utils/functions.js';
 
 class AuthenticateMiddleware implements MiddlewareInterface {
@@ -24,28 +22,14 @@ class AuthenticateMiddleware implements MiddlewareInterface {
       const payload = await verifyToken(token, this.jwtSecret);
       const result = await this.tokenService.findByToken(token);
 
-      if (!result) {
-        return next(
-          new HttpError(
-            StatusCodes.UNAUTHORIZED,
-            'Пользователь не авторизован.',
-            'AuthenticateMiddleware'
-          )
-        );
+      if (result) {
+        res.locals.user = {id: payload.id as string, email: payload.email as string};
       }
-
-      res.locals.user = {id: payload.id as string, email: payload.email as string};
 
       return next();
     } catch {
 
-      return next(
-        new HttpError(
-          StatusCodes.UNAUTHORIZED,
-          'Неверный токен',
-          'AuthenticateMiddleware'
-        )
-      );
+      return next();
     }
   }
 }

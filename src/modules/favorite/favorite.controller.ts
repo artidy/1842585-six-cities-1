@@ -14,6 +14,8 @@ import FavoriteDto from './dto/favorite.dto.js';
 import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectid.middleware.js';
 import DocumentExistsMiddleware from '../../common/middlewares/document-exists.middleware.js';
 import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
+import HttpError from '../../common/errors/http-error.js';
+import {StatusCodes} from 'http-status-codes';
 
 const PARAM_FAVORITE_ID = 'favoriteId';
 const ENTITY_NAME = 'Избранное';
@@ -27,7 +29,14 @@ class FavoriteController extends Controller {
     super(logger);
 
     this.logger.info('Добавление роутов для избранного...');
-    this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Get,
+      handler: this.index,
+      middlewares: [
+        new PrivateRouteMiddleware()
+      ]
+    });
     this.addRoute({
       path: '/',
       method: HttpMethod.Post,
@@ -57,8 +66,18 @@ class FavoriteController extends Controller {
 
   public async create({body}: Request<Record<string, string>, Record<string, unknown>, CreateFavoriteDto>,
     res: Response): Promise<void> {
+    const userId = res.locals.user.id;
+    const isAdded = await this.favoriteService.isAdded(body.offerId, userId);
 
-    const result = await this.favoriteService.create(body, res.locals.user.id);
+    if (isAdded) {
+      throw new HttpError(
+        StatusCodes.UNPROCESSABLE_ENTITY,
+        `Предложение c id: ${body.offerId} уже добавлено в избранное.`,
+        'FavoriteController',
+      );
+    }
+
+    const result = await this.favoriteService.create(body, userId);
 
     this.logger.info(`Предложение с id: ${result.offerId}`);
 

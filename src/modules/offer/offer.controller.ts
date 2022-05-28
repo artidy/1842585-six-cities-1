@@ -122,8 +122,8 @@ class OfferController extends Controller {
   }
 
   public async index(_req: Request, res: Response): Promise<void> {
-    const result = await this.offerService.find();
-
+    const result = await this.offerService.find(res.locals?.user?.id || '');
+    console.log(result);
     this.ok(res, fillDTO(OfferDto, result));
   }
 

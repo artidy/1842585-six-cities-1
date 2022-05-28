@@ -1,5 +1,6 @@
 ### Запрос всех предложений
 GET http://localhost:4000/offers
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjYyOTI0MmJkZDMwOWU1NmI3NWZjYjZkZSIsImVtYWlsIjoiYW5kcmV5QGV4YW1wbGUucnUiLCJpYXQiOjE2NTM3NjYzMDUsImV4cCI6MTY1Mzc2NzIwNX0.JEJ2zfJJKkmUqr50nOc0oW9hnYZ2qf4wzxvhMEtTU0k
 Accept: application/json
 
 ### Запрос одного предложения
@@ -50,7 +51,7 @@ Content-Type: application/json
 
 ### Добавление предложения в избранное
 POST http://localhost:4000/favorites
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjYyNzQzYzFiZTczMDQwY2I3NzBjYjQ2NiIsImVtYWlsIjoiYW50b25pb0BleGFtcGxlLnJ1IiwiaWF0IjoxNjUzNzUxNDE5LCJleHAiOjE2NTM3NTIzMTl9._dGxw5xxG5PeeHOqwZ1MDA9BvrhR_0lPSEvBm5iZA-8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjYyOTI0MmJkZDMwOWU1NmI3NWZjYjZkZSIsImVtYWlsIjoiYW5kcmV5QGV4YW1wbGUucnUiLCJpYXQiOjE2NTM3NTg4MTUsImV4cCI6MTY1Mzc1OTcxNX0.CShxnR27xg1P_AUyyLfpsZFmRTVH5ZPXCVzJ0ewfzbo
 Content-Type: application/json
 
 {
@@ -59,6 +60,7 @@ Content-Type: application/json
 
 ### Запрос предложений из избранного
 GET http://localhost:4000/favorites
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjYyOTI0MmJkZDMwOWU1NmI3NWZjYjZkZSIsImVtYWlsIjoiYW5kcmV5QGV4YW1wbGUucnUiLCJpYXQiOjE2NTM3NTc2NDMsImV4cCI6MTY1Mzc1ODU0M30.QDmZC8AczsqBkhGkTJ90EmMv1SribT0ht2wdlp7tQ0g
 Accept: application/json
 
 ### Удаление предложения из избранного
@@ -91,8 +93,8 @@ POST http://localhost:4000/users/refresh
 Content-Type: application/json
 
 {
-  "email": "antonio@example.ru",
-  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjYyNzQzYzFiZTczMDQwY2I3NzBjYjQ2NiIsImVtYWlsIjoiYW50b25pb0BleGFtcGxlLnJ1IiwiaWF0IjoxNjUzNzUxNDE5LCJleHAiOjE2NTYzNDM0MTl9.rf31CryR2xU6c2sGJxDPPRtf63SmDsM7mBPwmQiw2Hg"
+  "email": "andrey@example.ru",
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjYyOTI0MmJkZDMwOWU1NmI3NWZjYjZkZSIsImVtYWlsIjoiYW5kcmV5QGV4YW1wbGUucnUiLCJpYXQiOjE2NTM3NjYzMDUsImV4cCI6MTY1NjM1ODMwNX0.HSTVhEHfWWzqPtJ7fK299ltbj3-d9Ay_8keqV01Nxdc"
 }
 
 ### Отзыв токенов - логаут

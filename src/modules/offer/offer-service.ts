@@ -21,8 +21,36 @@ class OfferService implements OfferServiceInterface {
     @inject(Component.OfferModel) private readonly modelOffer: ModelType<OfferEntity>
   ) {}
 
-  public async find(): Promise<DocumentType<OfferEntity>[]> {
-    return this.modelOffer.find().limit(MAX_OFFERS_COUNT).exec();
+  public async find(userId = ''): Promise<DocumentType<OfferEntity>[]> {
+    return this.modelOffer.aggregate([
+      {
+        $lookup: {
+          from: 'favorites',
+          let: {offerId: '$_id', userId: userId},
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: [ '$offerId', '$$offerId' ]},
+                    { $eq: [ { $toString: '$userId' }, '$$userId' ]},
+                  ]
+                }
+              }
+            }
+          ],
+          as: 'favorites'
+        }
+      },
+      {
+        $addFields: {
+          id: { $toString: '$_id' },
+          isFavorite: { $gt: [{ $size: '$favorites' }, 0 ]}
+        }
+      },
+      { $unset: 'favorites' },
+      { $limit: MAX_OFFERS_COUNT }
+    ]).exec();
   }
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
