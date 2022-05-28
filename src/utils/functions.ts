@@ -1,6 +1,6 @@
 import {ClassConstructor, plainToInstance} from 'class-transformer';
-import jose from 'jose';
-import crypto from 'crypto';
+import * as jose from 'jose';
+import * as crypto from 'crypto';
 
 import {DatabaseOptions} from '../types/database-options.js';
 import ValidateTypeEnum from '../types/validate-type.enum.js';
