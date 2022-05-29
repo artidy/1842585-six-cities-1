@@ -1,7 +1,11 @@
 import {ClassConstructor, plainToInstance} from 'class-transformer';
+import * as jose from 'jose';
+import * as crypto from 'crypto';
+import {createSecretKey} from 'crypto';
 
 import {DatabaseOptions} from '../types/database-options.js';
 import ValidateTypeEnum from '../types/validate-type.enum.js';
+import Payload from '../types/payload.js';
 
 const generateRandomValue = (min: number, max: number, digit = 0): number =>
   +((Math.random() * (max - min)) + min).toFixed(digit);
@@ -75,9 +79,28 @@ const getValidateMessage = (validateType: ValidateTypeEnum, value: string | numb
       return 'неверный формат значения';
     case ValidateTypeEnum.IsEmail:
       return 'неверный формат электронного адреса';
+    case ValidateTypeEnum.IsJWT:
+      return 'неверный формат токена';
     default:
       return `${validateType} - неизвестная ошибка.`;
   }
+};
+
+const createJWT = async (
+  algorithm: string,
+  jwtSecret: string,
+  payload: object,
+  expirationTime = '30d'): Promise<string> =>
+  new jose.SignJWT({...payload})
+    .setProtectedHeader({alg: algorithm})
+    .setIssuedAt()
+    .setExpirationTime(expirationTime)
+    .sign(crypto.createSecretKey(jwtSecret, 'utf-8'));
+
+const verifyToken = async (token: string, secret: string): Promise<Payload> => {
+  const {payload} = await jose.jwtVerify(token, createSecretKey(secret, 'utf-8'));
+
+  return {id: payload.id as string, email: payload.email as string};
 };
 
 export {
@@ -88,5 +111,7 @@ export {
   getMongodbURI,
   fillDTO,
   createErrorObject,
-  getValidateMessage
+  getValidateMessage,
+  createJWT,
+  verifyToken
 };

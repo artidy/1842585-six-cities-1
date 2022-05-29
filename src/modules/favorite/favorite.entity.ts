@@ -10,7 +10,7 @@ export interface FavoriteEntity extends Base {}
 
 @ModelOptions({
   schemaOptions: {
-    collection: 'comments'
+    collection: 'favorites'
   }
 })
 export class FavoriteEntity extends TimeStamps {

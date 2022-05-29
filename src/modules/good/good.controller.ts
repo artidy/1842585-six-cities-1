@@ -13,6 +13,7 @@ import {HttpMethod} from '../../types/http-method.enum.js';
 import GoodDto from './dto/good.dto.js';
 import CreateGoodDto from './dto/create-good.dto.js';
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
+import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
 
 @injectable()
 class GoodController extends Controller {
@@ -28,7 +29,10 @@ class GoodController extends Controller {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateGoodDto)]
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDtoMiddleware(CreateGoodDto)
+      ]
     });
   }
 

@@ -1,4 +1,4 @@
-import {genSalt, hash} from 'bcrypt';
+import {compare, genSalt, hash} from 'bcrypt';
 import typegoose, {getModelForClass}  from '@typegoose/typegoose';
 import {Base, TimeStamps} from '@typegoose/typegoose/lib/defaultClasses.js';
 
@@ -27,7 +27,7 @@ export class UserEntity extends TimeStamps implements User {
   @prop({ unique: true, required: true })
   public email!: string;
 
-  @prop({ required: true, default: '' })
+  @prop({ default: '' })
   public avatarUrl!: string;
 
   @prop({ required: true, default: 'Новый пользователь' })
@@ -39,13 +39,17 @@ export class UserEntity extends TimeStamps implements User {
   @prop({ required: true })
   private password!: string;
 
-  public async setPassword(password: string, saltRounds: number) {
+  public async setPassword(password: string, saltRounds: number): Promise<void> {
     const salt = await genSalt(saltRounds);
     this.password = await hash(password, salt);
   }
 
-  public getPassword() {
+  public getPassword(): string {
     return this.password;
+  }
+
+  public async verifyPassword(password: string): Promise<boolean> {
+    return compare(password, this.password);
   }
 }
 

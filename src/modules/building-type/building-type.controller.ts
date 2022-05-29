@@ -13,6 +13,7 @@ import BuildingTypeDto from './dto/building-type.dto.js';
 import CreateBuildingTypeDto from './dto/create-building-type.dto.js';
 import HttpError from '../../common/errors/http-error.js';
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
+import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
 
 @injectable()
 class BuildingTypeController extends Controller {
@@ -28,7 +29,10 @@ class BuildingTypeController extends Controller {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateBuildingTypeDto)]
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDtoMiddleware(CreateBuildingTypeDto)
+      ]
     });
   }
 

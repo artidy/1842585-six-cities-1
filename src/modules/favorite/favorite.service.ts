@@ -31,6 +31,10 @@ class FavoriteService implements FavoriteServiceInterface {
     return this.favoriteModel.findByIdAndDelete(id);
   }
 
+  public async isAdded(offerId: string, userId: string): Promise<boolean> {
+    return (await this.favoriteModel.exists({offerId, userId}) !== null);
+  }
+
   public async exists(documentId: string): Promise<boolean> {
     return (await this.favoriteModel.exists({_id: documentId}) !== null);
   }

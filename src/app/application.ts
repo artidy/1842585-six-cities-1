@@ -9,6 +9,8 @@ import {LoggerInterface} from '../common/logger/logger.interface.js';
 import {getMongodbURI} from '../utils/functions.js';
 import {ExceptionFilterInterface} from '../common/errors/exception-filter.interface.js';
 import {ControllerInterface} from '../common/controller/controller.interface.js';
+import {TokenServiceInterface} from '../modules/token/token-service.interface.js';
+import AuthenticateMiddleware from '../common/middlewares/authenticate.middleware.js';
 
 @injectable()
 class Application {
@@ -24,7 +26,8 @@ class Application {
     @inject(Component.CityController) private cityController: ControllerInterface,
     @inject(Component.GoodController) private goodController: ControllerInterface,
     @inject(Component.UserController) private userController: ControllerInterface,
-    @inject(Component.FavoriteController) private favoriteController: ControllerInterface
+    @inject(Component.FavoriteController) private favoriteController: ControllerInterface,
+    @inject(Component.TokenServiceInterface) private tokenService: TokenServiceInterface
   ) {
     this.expressApp = express();
   }
@@ -44,6 +47,9 @@ class Application {
       '/upload',
       express.static(this.config.get('UPLOAD_DIR'))
     );
+
+    const authenticateMiddleware = new AuthenticateMiddleware(this.config.get('JWT_SECRET'), this.tokenService);
+    this.expressApp.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
   }
 
   public registerExceptionFilters() {

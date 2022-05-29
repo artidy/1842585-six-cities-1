@@ -16,12 +16,18 @@ import {HttpMethod} from '../../types/http-method.enum.js';
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectid.middleware.js';
 import UploadFileMiddleware from '../../common/middlewares/upload-file.middleware.js';
+import LoginUserDto from './dto/login-user.dto.js';
+import LoggedUserDto from './dto/logged-user.dto.js';
+import {TokenServiceInterface} from '../token/token-service.interface.js';
+import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
+import UpdateTokenDto from '../token/dto/update-token.dto.js';
 
 @injectable()
 class UserController extends Controller {
   constructor(
     @inject(Component.LoggerInterface) logger: LoggerInterface,
     @inject(Component.UserServiceInterface) private readonly userService: UserServiceInterface,
+    @inject(Component.TokenServiceInterface) private readonly tokenService: TokenServiceInterface,
     @inject(Component.ConfigInterface) private readonly config: ConfigInterface
   ) {
     super(logger);
@@ -35,10 +41,29 @@ class UserController extends Controller {
       middlewares: [new ValidateDtoMiddleware(CreateUserDto)]
     });
     this.addRoute({
+      path: '/login',
+      method: HttpMethod.Post,
+      handler: this.login,
+      middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
+    });
+    this.addRoute({
+      path: '/refresh',
+      method: HttpMethod.Post,
+      handler: this.refreshTokens,
+      middlewares: [new ValidateDtoMiddleware(UpdateTokenDto)]
+    });
+    this.addRoute({
+      path: '/logout',
+      method: HttpMethod.Post,
+      handler: this.logout,
+      middlewares: [new ValidateDtoMiddleware(UpdateTokenDto)]
+    });
+    this.addRoute({
       path: '/:userId/avatar',
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('userId'),
         new UploadFileMiddleware(this.config.get('UPLOAD_DIR'), 'avatar')
       ]
@@ -65,8 +90,50 @@ class UserController extends Controller {
     this.created(res, fillDTO(UserDto, result));
   }
 
-  public async uploadAvatar({params, file}: Request, res: Response) {
-    const result = await this.userService.updateById(params.userId, {avatarUrl: file?.path});
+  public async login({body}: Request<Record<string, unknown>, Record<string, unknown>, LoginUserDto>,
+    res: Response): Promise<void> {
+    const user = await this.userService.verifyUser(body);
+
+    if (!user) {
+      throw new HttpError(
+        StatusCodes.UNAUTHORIZED,
+        'Не прошли авторизацию',
+        'UserController'
+      );
+    }
+
+    const tokens = await this.tokenService.generateTokens({id: user.id, email: user.email});
+
+    await this.tokenService.create(tokens);
+
+    this.ok(res, fillDTO(LoggedUserDto, {...tokens, email: user.email}));
+  }
+
+  public async refreshTokens({body}: Request<Record<string, unknown>, UpdateTokenDto>, res: Response) {
+    const tokens = await this.tokenService.updateTokens(body.refreshToken);
+
+    if (!tokens) {
+      throw new HttpError(
+        StatusCodes.UNAUTHORIZED,
+        'Неудачная попытка обновления токена',
+        'UserController'
+      );
+    }
+
+    await this.tokenService.deleteByRefreshToken(body.refreshToken);
+    await this.tokenService.create(tokens);
+
+    this.ok(res, fillDTO(LoggedUserDto, {...tokens, email: body.email}));
+  }
+
+  public async logout({body}: Request<Record<string, unknown>, UpdateTokenDto>, res: Response) {
+    await this.tokenService.deleteByRefreshToken(body.refreshToken);
+
+    this.noContent(res);
+  }
+
+  public async uploadAvatar({file}: Request, res: Response) {
+    const result = await this.userService.updateById(res.locals.user.id, {avatarUrl: file?.path});
 
     this.created(res, fillDTO(UserDto, result));
   }

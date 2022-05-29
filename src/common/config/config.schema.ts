@@ -13,6 +13,9 @@ type ConfigSchema = {
   DB_PORT: number;
   DB_NAME: string;
   UPLOAD_DIR: string;
+  JWT_SECRET: string;
+  JWT_REFRESH_SECRET: string;
+  TOKEN_EXPIRATION_TIME: string;
 }
 
 const configSchema = convict<ConfigSchema>({
@@ -69,6 +72,24 @@ const configSchema = convict<ConfigSchema>({
     format: String,
     env: 'UPLOAD_DIR',
     default: './upload',
+  },
+  JWT_SECRET: {
+    doc: 'Секретная строка для генерации токена',
+    format: String,
+    env: 'JWT_SECRET',
+    default: null,
+  },
+  JWT_REFRESH_SECRET: {
+    doc: 'Секретная строка для генерации токена',
+    format: String,
+    env: 'JWT_REFRESH_SECRET',
+    default: null,
+  },
+  TOKEN_EXPIRATION_TIME: {
+    doc: 'Время действия токена',
+    format: String,
+    env: 'TOKEN_EXPIRATION_TIME',
+    default: '15m',
   }
 });
 
