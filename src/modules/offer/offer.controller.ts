@@ -17,6 +17,7 @@ import {CommentServiceInterface} from '../comment/comment-service.interface.js';
 import CommentDto from '../comment/dto/comment.dto.js';
 import DocumentExistsMiddleware from '../../common/middlewares/document-exists.middleware.js';
 import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
+import CheckOwnerMiddleware from '../../common/middlewares/check-owner.middleware.js';
 
 const ENTITY_OFFER_NAME = 'Предложение';
 const ENTITY_COMMENT_NAME = 'Комментарий';
@@ -104,7 +105,8 @@ class OfferController extends Controller {
         new ValidateObjectIdMiddleware(PARAM_COMMENT_ID),
         new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID),
         new DocumentExistsMiddleware(this.commentService, ENTITY_COMMENT_NAME, PARAM_COMMENT_ID),
-        new ValidateDtoMiddleware(UpdateOfferDto)
+        new ValidateDtoMiddleware(UpdateOfferDto),
+        new CheckOwnerMiddleware(this.commentService, PARAM_COMMENT_ID),
       ]
     });
     this.addRoute({
@@ -116,7 +118,8 @@ class OfferController extends Controller {
         new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
         new ValidateObjectIdMiddleware(PARAM_COMMENT_ID),
         new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID),
-        new DocumentExistsMiddleware(this.commentService, ENTITY_COMMENT_NAME, PARAM_COMMENT_ID)
+        new DocumentExistsMiddleware(this.commentService, ENTITY_COMMENT_NAME, PARAM_COMMENT_ID),
+        new CheckOwnerMiddleware(this.commentService, PARAM_COMMENT_ID),
       ]
     });
   }

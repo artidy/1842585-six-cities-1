@@ -44,6 +44,10 @@ class CommentService implements CommentServiceInterface {
     await this.commentModel.deleteMany({offerId: id});
   }
 
+  public async isOwner(userId: string, documentId: string): Promise<boolean> {
+    return (await this.commentModel.find({userId, offerId: documentId}) !== null);
+  }
+
   public async exists(documentId: string): Promise<boolean> {
     return (await this.commentModel.exists({_id: documentId}) !== null);
   }
