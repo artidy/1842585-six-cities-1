@@ -149,7 +149,10 @@ class OfferController extends Controller {
   }
 
   public async deleteOfferById({params}: Request, res: Response): Promise<void> {
-    await this.offerService.deleteById(params.offerId);
+    const {offerId} = params;
+
+    await this.offerService.deleteById(offerId);
+    await this.commentService.deleteByOfferId(offerId);
 
     this.noContent(res);
   }

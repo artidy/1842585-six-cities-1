@@ -10,6 +10,7 @@ interface CommentServiceInterface extends DocumentExistsInterface{
   findByOfferId(id: string): Promise<DocumentType<CommentEntity>[]>;
   updateById(id: string, dto: UpdateCommentDto): Promise<DocumentType<CommentEntity> | null>;
   deleteById(id: string): Promise<void | null>;
+  deleteByOfferId(id: string): Promise<void | null>;
 }
 
 export {CommentServiceInterface};

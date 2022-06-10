@@ -40,6 +40,10 @@ class CommentService implements CommentServiceInterface {
     await this.offerService.decCommentCount(id);
   }
 
+  public async deleteByOfferId(id: string): Promise<void | null> {
+    await this.commentModel.deleteMany({offerId: id});
+  }
+
   public async exists(documentId: string): Promise<boolean> {
     return (await this.commentModel.exists({_id: documentId}) !== null);
   }
