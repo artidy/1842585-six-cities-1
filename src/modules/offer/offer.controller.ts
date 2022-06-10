@@ -17,6 +17,7 @@ import {CommentServiceInterface} from '../comment/comment-service.interface.js';
 import CommentDto from '../comment/dto/comment.dto.js';
 import DocumentExistsMiddleware from '../../common/middlewares/document-exists.middleware.js';
 import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
+import CheckOwnerMiddleware from '../../common/middlewares/check-owner.middleware.js';
 
 const ENTITY_OFFER_NAME = 'Предложение';
 const ENTITY_COMMENT_NAME = 'Комментарий';
@@ -60,7 +61,8 @@ class OfferController extends Controller {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
         new ValidateDtoMiddleware(UpdateOfferDto),
-        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID)
+        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID),
+        new CheckOwnerMiddleware(this.offerService, PARAM_OFFER_ID),
       ]
     });
     this.addRoute({
@@ -70,7 +72,8 @@ class OfferController extends Controller {
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
-        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID)
+        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID),
+        new CheckOwnerMiddleware(this.offerService, PARAM_OFFER_ID),
       ]
     });
 
@@ -104,7 +107,8 @@ class OfferController extends Controller {
         new ValidateObjectIdMiddleware(PARAM_COMMENT_ID),
         new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID),
         new DocumentExistsMiddleware(this.commentService, ENTITY_COMMENT_NAME, PARAM_COMMENT_ID),
-        new ValidateDtoMiddleware(UpdateOfferDto)
+        new ValidateDtoMiddleware(UpdateOfferDto),
+        new CheckOwnerMiddleware(this.commentService, PARAM_COMMENT_ID),
       ]
     });
     this.addRoute({
@@ -116,7 +120,8 @@ class OfferController extends Controller {
         new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
         new ValidateObjectIdMiddleware(PARAM_COMMENT_ID),
         new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID),
-        new DocumentExistsMiddleware(this.commentService, ENTITY_COMMENT_NAME, PARAM_COMMENT_ID)
+        new DocumentExistsMiddleware(this.commentService, ENTITY_COMMENT_NAME, PARAM_COMMENT_ID),
+        new CheckOwnerMiddleware(this.commentService, PARAM_COMMENT_ID),
       ]
     });
   }
@@ -149,7 +154,10 @@ class OfferController extends Controller {
   }
 
   public async deleteOfferById({params}: Request, res: Response): Promise<void> {
-    await this.offerService.deleteById(params.offerId);
+    const {offerId} = params;
+
+    await this.offerService.deleteById(offerId);
+    await this.commentService.deleteByOfferId(offerId);
 
     this.noContent(res);
   }
