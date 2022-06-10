@@ -61,7 +61,8 @@ class OfferController extends Controller {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
         new ValidateDtoMiddleware(UpdateOfferDto),
-        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID)
+        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID),
+        new CheckOwnerMiddleware(this.offerService, PARAM_OFFER_ID),
       ]
     });
     this.addRoute({
@@ -71,7 +72,8 @@ class OfferController extends Controller {
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware(PARAM_OFFER_ID),
-        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID)
+        new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID),
+        new CheckOwnerMiddleware(this.offerService, PARAM_OFFER_ID),
       ]
     });
 

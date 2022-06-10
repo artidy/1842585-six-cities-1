@@ -3,8 +3,9 @@ import {DocumentType} from '@typegoose/typegoose';
 import {OfferEntity} from './offer.entity.js';
 import UpdateOfferDto from './dto/update-offer.dto.js';
 import {DocumentExistsInterface} from '../../types/document-exists.interface.js';
+import {CheckOwnerInterface} from '../../types/check-owner.interface.js';
 
-interface OfferServiceInterface extends DocumentExistsInterface{
+interface OfferServiceInterface extends DocumentExistsInterface, CheckOwnerInterface {
   find(offerId: string): Promise<DocumentType<OfferEntity>[]>;
   create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
   findById(id: string): Promise<DocumentType<OfferEntity> | null>;

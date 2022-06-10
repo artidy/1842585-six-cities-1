@@ -74,6 +74,10 @@ class OfferService implements OfferServiceInterface {
     return this.modelOffer.findByIdAndDelete(id);
   }
 
+  public async isOwner(userId: string, documentId: string): Promise<boolean> {
+    return (await this.modelOffer.exists({_id: documentId, host: userId}) !== null);
+  }
+
   public async exists(documentId: string): Promise<boolean> {
     return (await this.modelOffer.exists({_id: documentId}) !== null);
   }
