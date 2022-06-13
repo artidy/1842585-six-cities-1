@@ -65,6 +65,10 @@ class OfferService implements OfferServiceInterface {
     return this.modelOffer.findById(id).populate(POPULATE_FIELDS).exec();
   }
 
+  public async findPremium(): Promise<DocumentType<OfferEntity>[]> {
+    return this.modelOffer.find({isPremium: true}).populate(POPULATE_FIELDS).exec();
+  }
+
   public async updateById(id: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
     return this.modelOffer.findByIdAndUpdate(id, dto, {new: true})
       .populate(POPULATE_FIELDS).exec();
