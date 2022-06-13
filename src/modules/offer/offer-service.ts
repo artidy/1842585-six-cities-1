@@ -49,7 +49,42 @@ class OfferService implements OfferServiceInterface {
         }
       },
       { $unset: 'favorites' },
-      { $limit: MAX_OFFERS_COUNT }
+      { $limit: MAX_OFFERS_COUNT },
+      {
+        $lookup: {
+          from: 'cities',
+          localField: 'city',
+          foreignField: '_id',
+          as: 'city'
+        }
+      },
+      { $unwind: '$city' },
+      {
+        $lookup: {
+          from: 'building_types',
+          localField: 'type',
+          foreignField: '_id',
+          as: 'type'
+        }
+      },
+      { $unwind: '$type' },
+      {
+        $lookup: {
+          from: 'goods',
+          localField: 'goods',
+          foreignField: '_id',
+          as: 'goods'
+        }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'host',
+          foreignField: '_id',
+          as: 'host'
+        }
+      },
+      { $unwind: '$host' }
     ]).exec();
   }
 
