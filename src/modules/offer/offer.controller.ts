@@ -136,7 +136,7 @@ class OfferController extends Controller {
     {body}: Request<Record<string, unknown>, Record<string, unknown>, CreateOfferDto>,
     res: Response): Promise<void> {
 
-    const result = this.offerService.create(body);
+    const result = this.offerService.create(body, res.locals.user.id);
 
     this.created(res, fillDTO(OfferDto, result));
   }

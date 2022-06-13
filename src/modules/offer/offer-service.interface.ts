@@ -7,7 +7,7 @@ import {CheckOwnerInterface} from '../../types/check-owner.interface.js';
 
 interface OfferServiceInterface extends DocumentExistsInterface, CheckOwnerInterface {
   find(offerId: string): Promise<DocumentType<OfferEntity>[]>;
-  create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
+  create(dto: CreateOfferDto, userId: string): Promise<DocumentType<OfferEntity>>;
   findById(id: string): Promise<DocumentType<OfferEntity> | null>;
   updateById(id: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>;
   deleteById(id: string): Promise<void | null>;

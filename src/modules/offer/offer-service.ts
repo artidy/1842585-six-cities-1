@@ -53,8 +53,8 @@ class OfferService implements OfferServiceInterface {
     ]).exec();
   }
 
-  public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
-    const result = await this.modelOffer.create(dto);
+  public async create(dto: CreateOfferDto, userId: string): Promise<DocumentType<OfferEntity>> {
+    const result = await this.modelOffer.create({...dto, host: userId});
 
     this.logger.info(`Добавлено новое предложение id: ${result.id}`);
 
