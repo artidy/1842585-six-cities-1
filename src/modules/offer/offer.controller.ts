@@ -53,6 +53,7 @@ class OfferController extends Controller {
         new DocumentExistsMiddleware(this.offerService, ENTITY_OFFER_NAME, PARAM_OFFER_ID)
       ]
     });
+    this.addRoute({path: '/premium', method: HttpMethod.Get, handler: this.getPremium});
     this.addRoute({
       path: `/:${PARAM_OFFER_ID}`,
       method: HttpMethod.Patch,
@@ -136,7 +137,7 @@ class OfferController extends Controller {
     {body}: Request<Record<string, unknown>, Record<string, unknown>, CreateOfferDto>,
     res: Response): Promise<void> {
 
-    const result = this.offerService.create(body);
+    const result = this.offerService.create(body, res.locals.user.id);
 
     this.created(res, fillDTO(OfferDto, result));
   }
@@ -145,6 +146,12 @@ class OfferController extends Controller {
     const offer = await this.offerService.findById(params.offerId);
 
     this.ok(res, fillDTO(OfferDto, offer));
+  }
+
+  public async getPremium(_req: Request, res: Response): Promise<void> {
+    const premiumOffers = await this.offerService.findPremium();
+
+    this.ok(res, fillDTO(OfferDto, premiumOffers));
   }
 
   public async updateOfferById({params, body}: Request, res: Response): Promise<void> {

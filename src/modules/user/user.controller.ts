@@ -33,7 +33,12 @@ class UserController extends Controller {
     super(logger);
 
     this.logger.info('Добавление роутов для пользователей...');
-    this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Get,
+      handler: this.index,
+      middlewares: [new PrivateRouteMiddleware()]
+    });
     this.addRoute({
       path: '/',
       method: HttpMethod.Post,
@@ -71,7 +76,7 @@ class UserController extends Controller {
   }
 
   public async index(_req: Request, res: Response): Promise<void> {
-    this.ok(res, fillDTO(UserDto, await this.userService.find()));
+    this.ok(res, fillDTO(UserDto, res.locals.user));
   }
 
   public async register({body}: Request<Record<string, unknown>, Record<string, unknown>, CreateUserDto>, res: Response) {

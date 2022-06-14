@@ -74,9 +74,6 @@ class CreateOfferDto {
   @IsMongoId({message: getValidateMessage(ValidateTypeEnum.IsMongoId), each: true})
   public goods!: string[];
 
-  @IsMongoId({message: getValidateMessage(ValidateTypeEnum.IsMongoId)})
-  public host!: string;
-
   @MinLength(DESCRIPTION_MIN_LENGTH, {
     message: getValidateMessage(ValidateTypeEnum.MinLength, DESCRIPTION_MIN_LENGTH)
   })
